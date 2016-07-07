@@ -3,6 +3,8 @@
 #include <map>
 #include <string>
 #include <string.h>
+#include <limits.h>
+
 #include "../include/node.h"
 
 // constants for fragments (KB)
@@ -14,6 +16,7 @@ using namespace std;
 
 void* mem[fr_num];
 int node_num = 0;
+int max_nodes_in_fragment;
 map<string, int> mm;
 
 void initialize_mem()
@@ -22,22 +25,72 @@ void initialize_mem()
     {
         mem[i] = malloc(fr_mem * 1024);
 
-//        for(int j=0; j<fr_mem*1024; j++) *((char*)(mem[i] + j)) = 5;
-
-        *((short*)(mem[i] + 0)) = (short)0; // free fragment
+        // free fragment
+        for(int j = 0; j < fr_mem * 1024; j++)
+            *((char*)(mem[i] + j)) = 0;
     }
 
-//    for (int i = 0; i < fr_mem*10; i++)
+//    for (int i = 0; i < fr_mem * 1024; i++)
 //    {
 //        printf("%d\n", *((char*)(mem[8] + i)));
 //    }
 }
 
+/*
+    Find First Free Field
+*/
+node* fff_field()
+{
+    // finding fragment with some nodes already, but is not filled
+    for (int i = 0; i < fr_num; i++)
+    {
+        if ( *((short*)(mem[i])) < max_nodes_in_fragment && *((short*)(mem[i])) > 0 )
+        {
+            *((short*)(mem[i])) = *((short*)(mem[i])) + 1;
+            for (int j = 0; j < max_nodes_in_fragment; j++)
+            {
+                if ( *((char*)(mem[i] + 2 + j * (sizeof(node) + 1))) == 0 )
+                {
+                    *((char*)(mem[i] + 2 + j * (sizeof(node) + 1))) = 1; // filled field with some node
+                    return (node*)(mem[i] + 3 + j * (sizeof(node) + 1));
+                }
+            }
+        }
+    }
+
+    // finding free fragment if necessary
+    for (int i = 0; i < fr_num; i++)
+    {
+        if ( *((short*)(mem[i])) == 0 )
+        {
+            *((short*)(mem[i])) = *((short*)(mem[i])) + 1;
+            *((char*)(mem[i] + 2)) = 1; // filled field with some node
+            return (node*)(mem[i] + 3);
+        }
+    }
+}
+
+/*
+    Find First Free Fragment
+*/
+int fff_fragment()
+{
+    for (int i = 0; i < fr_num; i++)
+    {
+        if ( *((short*)(mem[i])) == 0 )
+        {
+            *((short*)(mem[i])) = SHRT_MAX;
+            //(void*)(mem[i] + fr_mem * 1024 - 4) = NULL;
+            return i;
+        }
+    }
+}
+
 node* create_node(char* name, bool folder, node* parent, node* older_from)
 {
     // finding first free field of free memory
-    // sample: first fragment
-    node* beg = (node*)(mem[0] + 2); // beginning of this node
+    node* beg;
+    beg = fff_field();
 
     // given parameters
     strcpy(beg->name, name);
@@ -166,7 +219,9 @@ void read_commands()
 int main()
 {
     initialize_mem();
+    max_nodes_in_fragment = (fr_mem - 2) / (sizeof(node) + 1);
     node* root = make_root();
+
     read_commands();
 
     return 0;
