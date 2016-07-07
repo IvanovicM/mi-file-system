@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1467886238 source:d:\1 marina\petnica\petnica 2016\projekat 2016\mi-file-system\src\node.cpp
+	<bits/stdc++.h>
+	"../include/node.h"
+
+1467905441 d:\1 marina\petnica\petnica 2016\projekat 2016\mi-file-system\include\node.h
+	<stdio.h>
+	<cstdlib>
+
+1467905350 source:d:\1 marina\petnica\petnica 2016\projekat 2016\mi-file-system\src\main.cpp
+	<stdio.h>
+	<cstdlib>
+	"../include/node.h"
+
+1467905449 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\node.cpp
+	<stdio.h>
+	<cstdlib>
+	"../include/node.h"
+
+1467905441 d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\include\node.h
+	<stdio.h>
+	<cstdlib>
+
