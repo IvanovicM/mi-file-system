@@ -17,6 +17,7 @@ using namespace std;
 void* mem[fr_num];
 int node_num = 0;
 int max_nodes_in_fragment;
+node* root;
 map<string, int> mm;
 
 void initialize_mem()
@@ -80,13 +81,15 @@ int fff_fragment()
         if ( *((short*)(mem[i])) == 0 )
         {
             *((short*)(mem[i])) = SHRT_MAX;
-            //(void*)(mem[i] + fr_mem * 1024 - 4) = NULL;
+            *((void**)(mem[i] + fr_mem * 1024 - 4)) = NULL;
             return i;
         }
     }
+
+    return -1;
 }
 
-node* create_node(char* name, bool folder, node* parent, node* older_from)
+node* create_node(char* name, bool folder, node* parent, node* older_from, node* older_to)
 {
     // finding first free field of free memory
     node* beg;
@@ -97,12 +100,12 @@ node* create_node(char* name, bool folder, node* parent, node* older_from)
     beg->folder = folder;
     beg->parent = parent;
     beg->older_from = older_from;
+    beg->older_to = older_to;
 
     beg->indx = node_num;
     node_num++;
 
     // when created
-    beg->older_to = NULL;
     beg->younger = NULL;
     beg->start = NULL;
 
@@ -111,12 +114,12 @@ node* create_node(char* name, bool folder, node* parent, node* older_from)
 
 void delete_node(node* del)
 {
-    // deleting
+    *((char*)(del - 1)) = 0; // is not filled with node anymore
 }
 
 node* make_root()
 {
-    node* root = create_node("R", true, NULL, NULL);
+    node* root = create_node("R", true, NULL, NULL, NULL);
     root->parent = root;
     root->older_from = root;
     return root;
@@ -219,8 +222,12 @@ void read_commands()
 int main()
 {
     initialize_mem();
+
     max_nodes_in_fragment = (fr_mem - 2) / (sizeof(node) + 1);
-    node* root = make_root();
+    root = make_root();
+
+    // testing fff_fragment
+    //printf("%d\n", fff_fragment());
 
     read_commands();
 
