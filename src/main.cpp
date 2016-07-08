@@ -105,6 +105,7 @@ int fff_fragment()
     return -1;
 }
 
+<<<<<<< HEAD
 /*
     Function for creating node
 
@@ -112,6 +113,8 @@ int fff_fragment()
 
     Output: pointer to node that is created
 */
+=======
+>>>>>>> 5dd2365613fbe75ee5c5810acb6ade3d615c1e06
 node* create_node(char* name, bool folder, node* parent, node* older_from, node* older_to)
 {
     // finding first free field of free memory
@@ -146,6 +149,7 @@ node* create_node(char* name, bool folder, node* parent, node* older_from, node*
 */
 void delete_node(node* del)
 {
+<<<<<<< HEAD
     // printf("ind je %d\n", *((char*)(  (void*)del - 1)));
     // printf("prva dva bajta: %d\n", *((short*)(mem[0])));
 
@@ -154,6 +158,9 @@ void delete_node(node* del)
 
     // printf("ind je %d\n", *((char*)(  (void*)del - 1)));
     // printf("prva dva bajta: %d\n", *((short*)(mem[0])));
+=======
+    *((char*)(del - 1)) = 0; // is not filled with node anymore
+>>>>>>> 5dd2365613fbe75ee5c5810acb6ade3d615c1e06
 }
 
 /*
@@ -337,6 +344,15 @@ void test_fff_field()
 int main()
 {
     initialize_mem();
+<<<<<<< HEAD
+=======
+
+    max_nodes_in_fragment = (fr_mem - 2) / (sizeof(node) + 1);
+    root = make_root();
+
+    // testing fff_fragment
+    //printf("%d\n", fff_fragment());
+>>>>>>> 5dd2365613fbe75ee5c5810acb6ade3d615c1e06
 
     max_nodes_in_fragment = (fr_mem * 1024 - 2) / (sizeof(node) + 1);
     root = make_root();

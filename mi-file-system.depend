@@ -21,7 +21,20 @@
 	<stdio.h>
 	<cstdlib>
 
+<<<<<<< HEAD
 1467997580 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\main.cpp
+=======
+1467975123 source:f:\mina-petnica\petnica\petnica 2016\projekat 2016\mi-file-system\src\node.cpp
+	<stdio.h>
+	<cstdlib>
+	"../include/node.h"
+
+1467975123 f:\mina-petnica\petnica\petnica 2016\projekat 2016\mi-file-system\include\node.h
+	<stdio.h>
+	<cstdlib>
+
+1467977162 source:f:\mina-petnica\petnica\petnica 2016\projekat 2016\mi-file-system\src\main.cpp
+>>>>>>> 5dd2365613fbe75ee5c5810acb6ade3d615c1e06
 	<stdio.h>
 	<cstdlib>
 	<map>
