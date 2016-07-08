@@ -12,18 +12,28 @@
 	<cstdlib>
 	"../include/node.h"
 
-1467905449 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\node.cpp
+1468011761 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\node.cpp
 	<stdio.h>
 	<cstdlib>
 	"../include/node.h"
 
-1467990589 d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\include\node.h
+1468013722 d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\include\node.h
 	<stdio.h>
 	<cstdlib>
 
-<<<<<<< HEAD
-1467997580 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\main.cpp
-=======
+1467990589 D
+
+1468014650 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\main.cpp
+	<stdio.h>
+	<cstdlib>
+	<map>
+	<string>
+	<string.h>
+	<limits.h>
+	"../include/node.h"
+	"../include/memory.h"
+	"../include/commands.h"
+
 1467975123 source:f:\mina-petnica\petnica\petnica 2016\projekat 2016\mi-file-system\src\node.cpp
 	<stdio.h>
 	<cstdlib>
@@ -34,7 +44,8 @@
 	<cstdlib>
 
 1467977162 source:f:\mina-petnica\petnica\petnica 2016\projekat 2016\mi-file-system\src\main.cpp
->>>>>>> 5dd2365613fbe75ee5c5810acb6ade3d615c1e06
+
+1467977162 2365613fbe75ee5c5810acb6ade3d615c1e06
 	<stdio.h>
 	<cstdlib>
 	<map>
@@ -42,4 +53,34 @@
 	<string.h>
 	<limits.h>
 	"../include/node.h"
+
+1468012782 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\commands.cpp
+	<stdio.h>
+	<cstdlib>
+	<map>
+	<string>
+	<string.h>
+	"../include/commands.h"
+
+1468013787 d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\include\commands.h
+	<stdio.h>
+	<cstdlib>
+	<map>
+	<string>
+	<string.h>
+
+1468014722 d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\include\memory.h
+	<stdio.h>
+	<cstdlib>
+	"../include/node.h"
+
+1468014071 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\memory.cpp
+	<stdio.h>
+	<cstdlib>
+	<map>
+	<string>
+	<string.h>
+	<limits.h>
+	"../include/node.h"
+	"../include/memory.h"
 

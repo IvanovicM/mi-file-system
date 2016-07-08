@@ -1,5 +1,17 @@
+/*
+    Marina Ivanovic
+    Project in Petnica Science Center
+*/
+
+#ifndef __NODE
+#define __NODE
+
 #include <stdio.h>
 #include <cstdlib>
+
+/*
+    Each object of this class is folder or file in mi-file-system.
+*/
 
 class node
 {
@@ -16,3 +28,4 @@ class node
         node* younger; // first son
 };
 
+#endif
