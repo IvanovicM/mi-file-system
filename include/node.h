@@ -6,6 +6,7 @@ class node
     public:
         char name[40]; // name of file; max length is 40
         int indx; // its unique ID
+        int fragm; // what fragment this node is in
         bool folder; // indicator for folders and files
         void* start; // pointer to the beginning of a file if it is not a folder
         node* parent; // its parent
