@@ -14,7 +14,7 @@
 #include "../include/memory.h"
 
 // constants for fragments (KB)
-#define full_mem 2000
+#define full_mem 512000
 #define fr_mem 4
 #define fr_num full_mem/fr_mem
 
@@ -131,6 +131,9 @@ node* memory::create_node(char* name, bool folder, node* parent, node* older_fro
     beg->older_from = older_from;
     beg->older_to = older_to;
 
+    if (beg->older_to != NULL)
+        (beg->older_to)->older_from = beg;
+
     beg->indx = node_num;
     node_num++;
 
@@ -154,6 +157,22 @@ node* memory::create_root()
 }
 
 /*
+    Function for deleting file
+
+    Input; pointer to node which is file that should be deleted
+
+    Output: /
+*/
+void memory::delete_file(node* del)
+{
+    while (del->start != NULL)
+    {
+        *((short*)(mem[del->fragm])) = 0;
+        del->start = *((void**)(mem[del->fragm] + fr_mem * 1024 - 4));
+    }
+}
+
+/*
     Function for deleting node
 
     Input: pointer to node that should be deleted
@@ -162,8 +181,26 @@ node* memory::create_root()
 */
 void memory::delete_node(node* del)
 {
+    // deleting file if node is a file, but not a folder
+    delete_file(del);
+
+    // changing pointers
+    if (del->parent == del->older_from) // parent
+    {
+        (del->older_from)->younger = del->older_to;
+    }
+    else
+    {
+        (del->older_from)->older_to = del->older_to;
+    }
+    if (del->older_to != NULL)
+    {
+        (del->older_to)->older_from = del->older_from;
+    }
+
+    // declaring node as non-existent
     *((short*)(mem[ del->fragm ])) = *((short*)(mem[ del->fragm ])) - 1; // in this fragment is one node less
-    *((char*)(  (void*)del - 1)) = 0; // is not filled with node anymore
+    *((char*)(  (char*)del - 1)) = 0; // is not filled with node anymore
 }
 
 void memory::test_fff_fragment()
@@ -227,9 +264,9 @@ void memory::test_fff_field()
 
     printf("\n");
 
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < fr_num; i++)
     {
-        printf("%d: %hd\n\n", i, *((short*)(mem[i])));
+        printf("%d: %hd\n", i, *((short*)(mem[i])));
         for (int j = 2; j < fr_mem * 1024; j++)
         {
             if ( *((char*)(mem[i] + j)) != 0 )

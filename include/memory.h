@@ -12,7 +12,7 @@
 #include "../include/node.h"
 
 // constants for fragments (KB)
-#define full_mem 2000
+#define full_mem 512000
 #define fr_mem 4
 #define fr_num full_mem/fr_mem
 
@@ -37,6 +37,7 @@ class memory
         node* create_node(char* name, bool folder, node* parent, node* older_from, node* older_to);
         node* create_root();
         void delete_node(node* del);
+        void delete_file(node* del);
 
         void test_fff_fragment();
         void test_fff_field();

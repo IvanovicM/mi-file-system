@@ -10,26 +10,101 @@
 #include <string.h>
 
 #include "../include/commands.h"
+#include "../include/node.h"
+#include "../include/memory.h"
 
 using namespace std;
 
 /*
+    ld
+*/
+void commands::_list_directory(node* curr)
+{
+    node* nxt = curr->younger;
+    if (nxt == NULL)
+        printf("Empty directory.\n");
+    while (nxt != NULL)
+    {
+        printf("%s\n", nxt->name);
+        nxt = nxt->older_to;
+    }
+}
+
+/*
+    cd
+*/
+node* commands::_change_directory(node* curr, char* name)
+{
+    if (!strcmp(name, "..")) // go back
+        return curr->parent;
+
+    node* nxt = curr->younger;
+    while (nxt != NULL) // finding that directory
+    {
+        if (!strcmp(name, nxt->name))
+            return nxt;
+        nxt = nxt->older_to;
+    }
+
+    printf("No such file or directory\n");
+    return curr;
+}
+
+/*
+    mkdir
+*/
+void commands::_make_directory(memory* part, node* curr, char* name)
+{
+    node* nxt = part->create_node(name, true, curr, curr, curr->younger);
+    curr->younger = nxt;
+
+//    // test
+//    printf("name: %s\nfolder: %s\n", nxt->name, nxt->folder ? "yes" : "no");
+}
+
+/*
+    mkfile
+*/
+void commands::_make_file(memory* part, node* curr, char* name)
+{
+    node* nxt = part->create_node(name, false, curr, curr, curr->younger);
+    curr->younger = nxt;
+
+//    // test
+//    printf("name: %s\nfolder: %s\n", nxt->name, nxt->folder ? "yes" : "no");
+}
+
+/*
+    del
+*/
+void commands::_delete(memory* part, node* curr)
+{
+    node* nxt = curr->younger;
+    while (nxt != NULL)
+    {
+        part->delete_node(nxt);
+        nxt = nxt->older_to;
+    }
+    part->delete_node(curr);
+}
+
+/*
     List of commands with codes:
         exit - 1
-        ls - 2
+        ld - 2
         cd - 3
         mkdir - 4
-        touch - 5
-        rm - 6
+        mkfile - 5
+        del - 6
 */
 void commands::map_commands()
 {
     mm["exit"] = 1;
-    mm["ls"] = 2;
+    mm["ld"] = 2;
     mm["cd"] = 3;
     mm["mkdir"] = 4;
-    mm["touch"] = 5;
-    mm["rm"] = 6;
+    mm["mkfile"] = 5;
+    mm["del"] = 6;
 }
 
 /*
@@ -37,9 +112,9 @@ void commands::map_commands()
         exit
             code: 1
             ex: root exit
-        ls (read-only) - List Directory - list everything that is inside selected directory
+        ld (read-only) - List Directory - list everything that is inside selected directory
             code: 2
-            ex: root ls
+            ex: root ld
                 list everything in folder root
         cd (read-only) - Change Directory - go in selected directory
             code: 3
@@ -49,16 +124,16 @@ void commands::map_commands()
             code: 4
             ex: root mkdir my-folder
                 make folder my-folder in folder root
-        touch - making new file
+        mkfile - Make File
             code: 5
-            ex: root touch my-file.txt
+            ex: root mkfile my-file.txt
                 create new file whose name is 'my-file.txt'
-        rm - Remove - delete selected file or folder
+        del - Delete - delete selected file or folder
             code: 6
-            ex: root rm my-folder
+            ex: root del my-folder
                 delete my-folder and recursive everything inside
 */
-void commands::read_commands()
+void commands::read_commands(memory* part, node* curr)
 {
     map_commands();
 
@@ -67,6 +142,7 @@ void commands::read_commands()
 
     do
     {
+        printf("%s> ", curr->name);
         scanf("%s", command);
 
         switch ( mm[command] )
@@ -78,28 +154,51 @@ void commands::read_commands()
             } break;
         case 2:
             {
-                // ls
-                printf("2\n");
+                // ld
+                _list_directory(curr);
             } break;
         case 3:
             {
                 // cd
-                printf("3\n");
+                char name[40];
+                scanf("%s", name);
+                curr = _change_directory(curr, name);
             } break;
         case 4:
             {
                 // mkdir
-                printf("4\n");
+                char name[40];
+                scanf("%s", name);
+                _make_directory(part, curr, name);
             } break;
         case 5:
             {
-                // touch
-                printf("5\n");
+                // mkfile
+                char name[40];
+                scanf("%s", name);
+                _make_file(part, curr, name);
             } break;
         case 6:
             {
-                // rm
-                printf("6\n");
+                // delete
+                char name[40];
+                scanf("%s", name);
+
+                node* nxt = curr->younger;
+                bool found = false;
+                while (nxt != NULL && !found) // finding that directory
+                {
+                    if (!strcmp(name, nxt->name))
+                        {
+                            _delete(part, nxt);
+                            found = true;
+                        }
+                    else
+                        nxt = nxt->older_to;
+                }
+
+                if (!found)
+                    printf("No such file or directory.\n");
             } break;
         default:
             {
