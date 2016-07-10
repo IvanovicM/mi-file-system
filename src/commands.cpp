@@ -4,6 +4,8 @@
 */
 
 #include <stdio.h>
+#include <iostream>
+#include <sstream>
 #include <cstdlib>
 #include <map>
 #include <string>
@@ -89,6 +91,27 @@ void commands::_delete(memory* part, node* curr)
 }
 
 /*
+    Prints path before scanning command;
+*/
+void commands::print_path(node* curr, node* root)
+{
+    if (curr != root)
+    {
+        print_path(curr->parent, root);
+        printf("\\%s", curr->name);
+    }
+    else
+        printf("%s:", curr->name);
+}
+
+void commands::input_error()
+{
+    // wrong command
+    printf("Wrong command!\n");
+    // recommend help
+}
+
+/*
     List of commands with codes:
         exit - 1
         ld - 2
@@ -105,106 +128,199 @@ void commands::map_commands()
     mm["mkdir"] = 4;
     mm["mkfile"] = 5;
     mm["del"] = 6;
+    mm["cp"] = 7;
 }
 
 /*
     List of commands:
         exit
             code: 1
-            ex: root exit
+            ex: root> exit
         ld (read-only) - List Directory - list everything that is inside selected directory
             code: 2
-            ex: root ld
+            ex: root> ld
                 list everything in folder root
-        cd (read-only) - Change Directory - go in selected directory
+        cd (read-only) - Change Directory - go to selected directory
             code: 3
-            ex: root cd my-folder
+            ex: root> cd my-folder
                 go to my-folder if it exists in folder root
         mkdir - Make Directory - make new directory
             code: 4
-            ex: root mkdir my-folder
+            ex: root> mkdir my-folder
                 make folder my-folder in folder root
         mkfile - Make File
             code: 5
-            ex: root mkfile my-file.txt
+            ex: root> mkfile my-file.txt
                 create new file whose name is 'my-file.txt'
         del - Delete - delete selected file or folder
             code: 6
-            ex: root del my-folder
+            ex: root> del my-folder
                 delete my-folder and recursive everything inside
+        cp - Copy
+            code: 7
+            ex: root> cp file.txt root/a/b
+                copies file.txt that was in root to folder root/a/b
 */
-void commands::read_commands(memory* part, node* curr)
+void commands::read_commands(memory* part, node* curr, node* root)
 {
     map_commands();
 
-    char command[10];
     bool running = true;
 
     do
     {
-        printf("%s> ", curr->name);
-        scanf("%s", command);
+        // print path
+        print_path(curr, root);
+        printf("> ");
 
-        switch ( mm[command] )
+        // scan
+        string line;
+        getline(cin, line);
+
+        // parse
+        istringstream iss(line);
+        string cmd;
+        iss >> cmd;
+
+        // recognize command
+        switch ( mm[cmd] )
         {
-        case 1:
+        case 1: // exit
             {
-                // exit
-                running = false;
-            } break;
-        case 2:
-            {
-                // ld
-                _list_directory(curr);
-            } break;
-        case 3:
-            {
-                // cd
-                char name[40];
-                scanf("%s", name);
-                curr = _change_directory(curr, name);
-            } break;
-        case 4:
-            {
-                // mkdir
-                char name[40];
-                scanf("%s", name);
-                _make_directory(part, curr, name);
-            } break;
-        case 5:
-            {
-                // mkfile
-                char name[40];
-                scanf("%s", name);
-                _make_file(part, curr, name);
-            } break;
-        case 6:
-            {
-                // delete
-                char name[40];
-                scanf("%s", name);
-
-                node* nxt = curr->younger;
-                bool found = false;
-                while (nxt != NULL && !found) // finding that directory
+                int uk = 0;
+                while (iss)
                 {
-                    if (!strcmp(name, nxt->name))
-                        {
-                            _delete(part, nxt);
-                            found = true;
-                        }
-                    else
-                        nxt = nxt->older_to;
+                    string sub;
+                    iss >> sub;
+                    uk++;
                 }
 
-                if (!found)
-                    printf("No such file or directory.\n");
+                if (uk == 1)
+                    running = false;
+                else
+                    input_error();
+
             } break;
+        case 2: // list directory
+            {
+                int uk = 0;
+                while (iss)
+                {
+                    string sub;
+                    iss >> sub;
+                    uk++;
+                }
+
+                if (uk == 1)
+                    _list_directory(curr);
+                else
+                    input_error();
+
+            } break;
+        case 3: // change directory
+            {
+                char name[40];
+                string sub;
+                iss >> sub;
+                strcpy(name, sub.c_str());
+
+                int uk = 0;
+                while (iss)
+                {
+                    sub;
+                    iss >> sub;
+                    uk++;
+                }
+
+                if (uk == 1)
+                    _change_directory(curr, name);
+                else
+                    input_error();
+
+            } break;
+        case 4: // make directory
+            {
+                char name[40];
+                string sub;
+                iss >> sub;
+                strcpy(name, sub.c_str());
+
+                int uk = 0;
+                while (iss)
+                {
+                    sub;
+                    iss >> sub;
+                    uk++;
+                }
+
+                if (uk == 1)
+                    _make_directory(part, curr, name);
+                else
+                    input_error();
+            } break;
+        case 5: // make file
+            {
+                char name[40];
+                string sub;
+                iss >> sub;
+                strcpy(name, sub.c_str());
+
+                int uk = 0;
+                while (iss)
+                {
+                    sub;
+                    iss >> sub;
+                    uk++;
+                }
+
+                if (uk == 1)
+                    _make_file(part, curr, name);
+                else
+                    input_error();
+            } break;
+        case 6: // delete
+            {
+                char name[40];
+                string sub;
+                iss >> sub;
+                strcpy(name, sub.c_str());
+
+                int uk = 0;
+                while (iss)
+                {
+                    sub;
+                    iss >> sub;
+                    uk++;
+                }
+
+                if (uk == 1)
+                    {
+                        node* nxt = curr->younger;
+                        bool found = false;
+                        while (nxt != NULL && !found) // finding that directory
+                        {
+                            if (!strcmp(name, nxt->name))
+                                {
+                                    _delete(part, nxt);
+                                    found = true;
+                                }
+                            else
+                                nxt = nxt->older_to;
+                        }
+
+                        if (!found)
+                            printf("No such file or directory.\n");
+                    }
+                else
+                    input_error();
+            } break;
+        case 7: // copy
+            {
+
+            }
         default:
             {
-                // wrong command
-                printf("Wrong command!\n");
-                // recommend help
+                input_error();
             }
         }
     }

@@ -12,7 +12,7 @@
 #include "../include/node.h"
 
 // constants for fragments (KB)
-#define full_mem 512000
+#define full_mem 4000
 #define fr_mem 4
 #define fr_num full_mem/fr_mem
 

@@ -31,8 +31,11 @@ class commands
         void _make_file(memory* part, node* curr, char* name);
         void _delete(memory* part, node* curr);
 
+        void input_error();
+
+        void print_path(node* curr, node* root);
         void map_commands();
-        void read_commands(memory* part, node* curr);
+        void read_commands(memory* part, node* curr, node* root);
 };
 
 #endif

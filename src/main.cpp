@@ -9,6 +9,8 @@
 #include <string>
 #include <string.h>
 #include <limits.h>
+#include <sstream>
+#include <iostream>
 
 #include "../include/node.h"
 #include "../include/memory.h"
@@ -29,7 +31,7 @@ int main()
 //    part->test_fff_field();
 
     commands* comm = new commands();
-    comm->read_commands(part, root);
+    comm->read_commands(part, root, root);
 
     return 0;
 }
