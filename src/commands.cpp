@@ -17,6 +17,13 @@
 
 using namespace std;
 
+void commands::input_error()
+{
+    // wrong command
+    printf("Wrong command!\n");
+    // recommend help
+}
+
 /*
     ld
 */
@@ -27,7 +34,7 @@ void commands::_list_directory(node* curr)
         printf("Empty directory.\n");
     while (nxt != NULL)
     {
-        printf("%s\n", nxt->name);
+        nxt->print_node();
         nxt = nxt->older_to;
     }
 }
@@ -44,11 +51,21 @@ node* commands::_change_directory(node* curr, char* name)
     while (nxt != NULL) // finding that directory
     {
         if (!strcmp(name, nxt->name))
-            return nxt;
+        {
+            if (!(nxt->folder))
+            {
+                input_error();
+                return curr;
+            }
+            else
+            {
+                return nxt;
+            }
+        }
         nxt = nxt->older_to;
     }
 
-    printf("No such file or directory\n");
+    printf("No such file or directory.\n");
     return curr;
 }
 
@@ -90,6 +107,11 @@ void commands::_delete(memory* part, node* curr)
     part->delete_node(curr);
 }
 
+void commands::_copy(node* from, node* cop, node* to)
+{
+
+}
+
 /*
     Prints path before scanning command;
 */
@@ -104,13 +126,6 @@ void commands::print_path(node* curr, node* root)
         printf("%s:", curr->name);
 }
 
-void commands::input_error()
-{
-    // wrong command
-    printf("Wrong command!\n");
-    // recommend help
-}
-
 /*
     List of commands with codes:
         exit - 1
@@ -119,6 +134,7 @@ void commands::input_error()
         mkdir - 4
         mkfile - 5
         del - 6
+        cp - 7
 */
 void commands::map_commands()
 {
@@ -233,50 +249,104 @@ void commands::read_commands(memory* part, node* curr, node* root)
                 }
 
                 if (uk == 1)
-                    _change_directory(curr, name);
+                    curr = _change_directory(curr, name);
                 else
                     input_error();
 
             } break;
         case 4: // make directory
             {
-                char name[40];
                 string sub;
                 iss >> sub;
-                strcpy(name, sub.c_str());
-
-                int uk = 0;
-                while (iss)
-                {
-                    sub;
-                    iss >> sub;
-                    uk++;
-                }
-
-                if (uk == 1)
-                    _make_directory(part, curr, name);
+                if (sub.length() > 40)
+                    printf("Invalid name.\n");
                 else
-                    input_error();
+                {
+                    char name[40];
+                    strcpy(name, sub.c_str());
+
+                    int uk = 0;
+                    while (iss)
+                    {
+                        sub;
+                        iss >> sub;
+                        uk++;
+                    }
+
+                    if (uk == 1)
+                    {
+                        if ( (strstr(name, "\\") || strstr(name, "/") || strstr(name, ":") || strstr(name, "*") || strstr(name, "?") || strstr(name, "\"") || strstr(name, "<") || strstr(name, ">") || strstr(name, "|")) || (!strcmp(name, ".") || !strcmp(name, "..")) )
+                            printf("Invalid name.\n");
+                        else
+                        {
+                            bool found = false;
+
+                            node* nxt = curr->younger;
+                            while (nxt != NULL && !found)
+                            {
+                                if (!strcmp(nxt->name, name))
+                                    found = true;
+                                nxt = nxt->older_to;
+                            }
+
+                            if (found)
+                                printf("Directory or file with this name already exists.\n");
+                            else
+                            {
+                                _make_directory(part, curr, name);
+                            }
+                        }
+                    }
+                    else
+                        input_error();
+                }
             } break;
         case 5: // make file
             {
-                char name[40];
                 string sub;
                 iss >> sub;
-                strcpy(name, sub.c_str());
-
-                int uk = 0;
-                while (iss)
-                {
-                    sub;
-                    iss >> sub;
-                    uk++;
-                }
-
-                if (uk == 1)
-                    _make_file(part, curr, name);
+                if (sub.length() > 40)
+                    printf("Invalid name.\n");
                 else
-                    input_error();
+                {
+                    char name[40];
+                    strcpy(name, sub.c_str());
+
+                    int uk = 0;
+                    while (iss)
+                    {
+                        sub;
+                        iss >> sub;
+                        uk++;
+                    }
+
+                    if (uk == 1)
+                    {
+                        if ( (strstr(name, "\\") || strstr(name, "/") || strstr(name, ":") || strstr(name, "*") || strstr(name, "?") || strstr(name, "\"") || strstr(name, "<") || strstr(name, ">") || strstr(name, "|")) || (!strcmp(name, ".") || !strcmp(name, "..")) )
+                            printf("Invalid name.\n");
+                        else
+                        {
+                            bool found = false;
+
+                            node* nxt = curr->younger;
+                            while (nxt != NULL && !found)
+                            {
+                                if (!strcmp(nxt->name, name))
+                                    found = true;
+                                nxt = nxt->older_to;
+                            }
+
+                            if (found)
+                                printf("Directory or file with this name already exists.\n");
+                            else
+                            {
+                                _make_file(part, curr, name);
+                            }
+                        }
+                    }
+                    else
+                        input_error();
+                }
             } break;
         case 6: // delete
             {

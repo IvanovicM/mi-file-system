@@ -25,13 +25,14 @@ class commands
         std::map<std::string, int> mm; // codes of commands
 
     public:
+        void input_error();
+
         void _list_directory(node* curr);
         node* _change_directory(node* curr, char* name);
         void _make_directory(memory* part, node* curr, char* name);
         void _make_file(memory* part, node* curr, char* name);
         void _delete(memory* part, node* curr);
-
-        void input_error();
+        void _copy(node* from, node* cop, node* to);
 
         void print_path(node* curr, node* root);
         void map_commands();

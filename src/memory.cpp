@@ -9,6 +9,7 @@
 #include <string>
 #include <string.h>
 #include <limits.h>
+#include <time.h>
 
 #include "../include/node.h"
 #include "../include/memory.h"
@@ -141,6 +142,8 @@ node* memory::create_node(char* name, bool folder, node* parent, node* older_fro
     beg->younger = NULL;
     beg->start = NULL;
     beg->fragm = x.first;
+    beg->sizeB = 0;
+    beg->date_modf = time(0);
 
     return beg;
 }
