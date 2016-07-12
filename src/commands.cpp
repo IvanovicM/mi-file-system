@@ -17,11 +17,122 @@
 
 using namespace std;
 
+node* dest_prnt;
+string dest_name;
+
+/*
+    Inform if input is not correct.
+*/
 void commands::input_error()
 {
     // wrong command
     printf("Wrong command!\n");
     // recommend help
+}
+
+/*
+    Find son of given node, if it exists.
+*/
+node* commands::find_son(node* parent, char* son_name)
+{
+    node* nxt = parent->younger;
+    while (nxt != NULL) // finding that directory or file
+    {
+        if (!strcmp(son_name, nxt->name))
+        {
+            return nxt;
+        }
+        nxt = nxt->older_to;
+    }
+    return NULL;
+}
+
+/*
+    Parse string and recognize folder (if possible).
+*/
+void commands::destination(memory* part, node* root, node* curr, string dest)
+{
+    // BEGIN
+
+    string delimiter = "/";
+
+    size_t pos = 0;
+    string token;
+
+    // check if begging is root
+    pos = dest.find(delimiter);
+    token = dest.substr(0, pos);
+    if (token.empty())
+    {
+        curr = root;
+        dest.erase(0, pos + delimiter.length());
+    }
+
+    while ((pos = dest.find(delimiter)) != string::npos)
+    {
+        token = dest.substr(0, pos);
+        if (!strcmp(token.c_str(), ".."))
+            curr = curr->parent;
+        else
+        {
+            curr = find_son(curr, (char*)token.c_str());
+            if (curr == NULL || !curr->folder)
+            {
+                dest_prnt = curr;
+                dest_name = dest;
+                return;
+            }
+        }
+        dest.erase(0, pos + delimiter.length());
+    }
+
+    // END
+
+    dest_prnt = curr;
+    dest_name = dest;
+    return;
+
+//    node* parent = curr;
+//    curr = find_son(curr, (char*)dest.c_str());
+//
+//    if (exist) // has to exist
+//    {
+//        if (!strcmp(dest.c_str(), ".."))
+//            return curr->parent;
+//
+//        if (curr == NULL) // if is does not exist
+//        {
+//            return NULL;
+//        }
+//        else
+//        {
+//            if (folder)
+//            {
+//                if (!curr->folder)
+//                    return curr;
+//                else
+//                    return NULL;
+//            }
+//        }
+//    }
+//    else // must not exist
+//    {
+//        if (curr != NULL)
+//        {
+//            return NULL;
+//        }
+//        else
+//        {
+//            if (folder)
+//            {
+//                curr = part->create_node((char*)dest.c_str(), true, parent, parent, parent->younger);
+//            }
+//            else
+//            {
+//                curr = part->create_node((char*)dest.c_str(), false, parent, parent, parent->younger);
+//            }
+//        }
+//    }
 }
 
 /*
@@ -72,25 +183,73 @@ node* commands::_change_directory(node* curr, char* name)
 /*
     mkdir
 */
-void commands::_make_directory(memory* part, node* curr, char* name)
+void commands::_make_directory(memory* part, node* curr, string sub)
 {
-    node* nxt = part->create_node(name, true, curr, curr, curr->younger);
-    curr->younger = nxt;
+    if (sub.length() > 40)
+        printf("Invalid name.\n");
+    else
+    {
+        char name[40];
+        strcpy(name, sub.c_str());
 
-//    // test
-//    printf("name: %s\nfolder: %s\n", nxt->name, nxt->folder ? "yes" : "no");
+        if ( (strstr(name, "\\") || strstr(name, "/") || strstr(name, ":") || strstr(name, "*") || strstr(name, "?") || strstr(name, "\"") || strstr(name, "<") || strstr(name, ">") || strstr(name, "|")) || (!strcmp(name, ".") || !strcmp(name, "..")) )
+            printf("Invalid name.\n");
+        else
+            {
+            bool found = false;
+            node* nxt = curr->younger;
+            while (nxt != NULL && !found)
+            {
+                if (!strcmp(nxt->name, name))
+                    found = true;
+                nxt = nxt->older_to;
+            }
+
+            if (found)
+                printf("Directory or file with this name already exists.\n");
+            else
+            {
+                node* nxt = part->create_node(name, true, curr, curr, curr->younger);
+                curr->younger = nxt;
+            }
+        }
+    }
 }
 
 /*
     mkfile
 */
-void commands::_make_file(memory* part, node* curr, char* name)
+void commands::_make_file(memory* part, node* curr, string sub)
 {
-    node* nxt = part->create_node(name, false, curr, curr, curr->younger);
-    curr->younger = nxt;
+    if (sub.length() > 40)
+        printf("Invalid name.\n");
+    else
+    {
+        char name[40];
+        strcpy(name, sub.c_str());
 
-//    // test
-//    printf("name: %s\nfolder: %s\n", nxt->name, nxt->folder ? "yes" : "no");
+        if ( (strstr(name, "\\") || strstr(name, "/") || strstr(name, ":") || strstr(name, "*") || strstr(name, "?") || strstr(name, "\"") || strstr(name, "<") || strstr(name, ">") || strstr(name, "|")) || (!strcmp(name, ".") || !strcmp(name, "..")) )
+            printf("Invalid name.\n");
+        else
+            {
+            bool found = false;
+            node* nxt = curr->younger;
+            while (nxt != NULL && !found)
+            {
+                if (!strcmp(nxt->name, name))
+                    found = true;
+                nxt = nxt->older_to;
+            }
+
+            if (found)
+                printf("Directory or file with this name already exists.\n");
+            else
+            {
+                node* nxt = part->create_node(name, false, curr, curr, curr->younger);
+                curr->younger = nxt;
+            }
+        }
+    }
 }
 
 /*
@@ -107,6 +266,9 @@ void commands::_delete(memory* part, node* curr)
     part->delete_node(curr);
 }
 
+/*
+    cp
+*/
 void commands::_copy(node* from, node* cop, node* to)
 {
 
@@ -120,7 +282,7 @@ void commands::print_path(node* curr, node* root)
     if (curr != root)
     {
         print_path(curr->parent, root);
-        printf("\\%s", curr->name);
+        printf("/%s", curr->name);
     }
     else
         printf("%s:", curr->name);
@@ -235,118 +397,90 @@ void commands::read_commands(memory* part, node* curr, node* root)
             } break;
         case 3: // change directory
             {
-                char name[40];
+                string dest;
                 string sub;
                 iss >> sub;
-                strcpy(name, sub.c_str());
+                dest = sub;
 
                 int uk = 0;
                 while (iss)
                 {
-                    sub;
                     iss >> sub;
                     uk++;
                 }
 
                 if (uk == 1)
-                    curr = _change_directory(curr, name);
+                {
+                    node* save_curr = curr;
+                    destination(part, root, curr, dest);
+                    if (curr == NULL)
+                        input_error();
+                    else
+                    {
+                        curr = _change_directory(dest_prnt, (char*)dest_name.c_str());
+                    }
+                }
                 else
                     input_error();
 
             } break;
         case 4: // make directory
             {
+                string dest;
                 string sub;
                 iss >> sub;
-                if (sub.length() > 40)
-                    printf("Invalid name.\n");
-                else
+                dest = sub;
+
+                int uk = 0;
+                while (iss)
                 {
-                    char name[40];
-                    strcpy(name, sub.c_str());
-
-                    int uk = 0;
-                    while (iss)
-                    {
-                        sub;
-                        iss >> sub;
-                        uk++;
-                    }
-
-                    if (uk == 1)
-                    {
-                        if ( (strstr(name, "\\") || strstr(name, "/") || strstr(name, ":") || strstr(name, "*") || strstr(name, "?") || strstr(name, "\"") || strstr(name, "<") || strstr(name, ">") || strstr(name, "|")) || (!strcmp(name, ".") || !strcmp(name, "..")) )
-                            printf("Invalid name.\n");
-                        else
-                        {
-                            bool found = false;
-
-                            node* nxt = curr->younger;
-                            while (nxt != NULL && !found)
-                            {
-                                if (!strcmp(nxt->name, name))
-                                    found = true;
-                                nxt = nxt->older_to;
-                            }
-
-                            if (found)
-                                printf("Directory or file with this name already exists.\n");
-                            else
-                            {
-                                _make_directory(part, curr, name);
-                            }
-                        }
-                    }
-                    else
-                        input_error();
+                    iss >> sub;
+                    uk++;
                 }
+
+                if (uk == 1)
+                {
+                    node* save_curr = curr;
+                    destination(part, root, curr, dest);
+                    if (curr == NULL)
+                        input_error();
+                    else
+                    {
+                        _make_directory(part, dest_prnt, dest_name);
+                    }
+                }
+                else
+                    input_error();
+
             } break;
         case 5: // make file
             {
+                string dest;
                 string sub;
                 iss >> sub;
-                if (sub.length() > 40)
-                    printf("Invalid name.\n");
-                else
+                dest = sub;
+
+                int uk = 0;
+                while (iss)
                 {
-                    char name[40];
-                    strcpy(name, sub.c_str());
-
-                    int uk = 0;
-                    while (iss)
-                    {
-                        sub;
-                        iss >> sub;
-                        uk++;
-                    }
-
-                    if (uk == 1)
-                    {
-                        if ( (strstr(name, "\\") || strstr(name, "/") || strstr(name, ":") || strstr(name, "*") || strstr(name, "?") || strstr(name, "\"") || strstr(name, "<") || strstr(name, ">") || strstr(name, "|")) || (!strcmp(name, ".") || !strcmp(name, "..")) )
-                            printf("Invalid name.\n");
-                        else
-                        {
-                            bool found = false;
-
-                            node* nxt = curr->younger;
-                            while (nxt != NULL && !found)
-                            {
-                                if (!strcmp(nxt->name, name))
-                                    found = true;
-                                nxt = nxt->older_to;
-                            }
-
-                            if (found)
-                                printf("Directory or file with this name already exists.\n");
-                            else
-                            {
-                                _make_file(part, curr, name);
-                            }
-                        }
-                    }
-                    else
-                        input_error();
+                    iss >> sub;
+                    uk++;
                 }
+
+                if (uk == 1)
+                {
+                    node* save_curr = curr;
+                    destination(part, root, curr, dest);
+                    if (curr == NULL)
+                        input_error();
+                    else
+                    {
+                        _make_file(part, dest_prnt, dest_name);
+                    }
+                }
+                else
+                    input_error();
+
             } break;
         case 6: // delete
             {
@@ -393,6 +527,8 @@ void commands::read_commands(memory* part, node* curr, node* root)
                 input_error();
             }
         }
+
+        printf("\n");
     }
     while(running);
 }

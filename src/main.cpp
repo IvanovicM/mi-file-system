@@ -35,3 +35,24 @@ int main()
 
     return 0;
 }
+
+//int main()
+//{
+//    string s = "/home/marina/ivanovic";
+//    string delimiter = "/";
+//
+//    size_t pos = 0;
+//    string token;
+//    while ((pos = s.find(delimiter)) != string::npos)
+//    {
+//        token = s.substr(0, pos);
+//        if (token.empty())
+//                printf("idi u R\n");
+//        else
+//            printf("%s\n", token.c_str());
+//        s.erase(0, pos + delimiter.length());
+//    }
+//    printf("%s\n", s.c_str());
+//
+//    return 0;
+//}

@@ -24,5 +24,5 @@ string node::last_date_modf()
 
 void node::print_node()
 {
-    printf("%-25s %-10s %-7d %s\n", last_date_modf().c_str(), folder ? "<DIR>" : "", sizeB, name);
+    printf("%-23s %-10s %-7d %s\n", last_date_modf().c_str(), folder ? "<DIR>" : "", sizeB, name);
 }
