@@ -15,7 +15,7 @@
 #include "../include/memory.h"
 
 // constants for fragments (KB)
-#define full_mem 4000
+#define full_mem 2000
 #define fr_mem 4
 #define fr_num full_mem/fr_mem
 
@@ -66,7 +66,7 @@ pair<int, int> memory::fff_field()
     {
         if ( *((short*)(mem[i])) < max_nodes_in_fragment && *((short*)(mem[i])) > 0 )
         {
-            *((short*)(mem[i])) = *((short*)(mem[i])) + 1;
+            *((short*)(mem[i])) = *((short*)(mem[i])) + 1; // in this field is one node added
             for (int j = 0; j < max_nodes_in_fragment; j++)
             {
                 if ( *((char*)(mem[i] + 2 + j * (sizeof(node) + 1))) == 0 )
@@ -83,7 +83,7 @@ pair<int, int> memory::fff_field()
     {
         if ( *((short*)(mem[i])) == 0 )
         {
-            *((short*)(mem[i])) = *((short*)(mem[i])) + 1;
+            *((short*)(mem[i])) = *((short*)(mem[i])) + 1; // in this field is one node added
             *((char*)(mem[i] + 2)) = 1; // filled field with some node
             return make_pair(i, 0);
         }
@@ -153,10 +153,29 @@ node* memory::create_node(char* name, bool folder, node* parent, node* older_fro
 */
 node* memory::create_root()
 {
-    node* root = create_node("R", true, NULL, NULL, NULL);
-    root->parent = root;
-    root->older_from = root;
-    return root;
+    *((short*)(mem[0])) = *((short*)(mem[0])) + 1; // in this field is one node added
+    *((char*)(mem[0] + 2)) = 1; // filled field with some node
+
+    pair<int, int> x = make_pair(0, 0);
+    node* beg = (node*)(mem[x.first] + 3 + x.second * (sizeof(node) + 1));
+
+    // default parameters for root
+    strcpy(beg->name, "R");
+    beg->folder = true;
+    beg->parent = beg;
+    beg->older_to = NULL;
+
+    beg->indx = node_num;
+    node_num++;
+
+    // when created
+    beg->younger = NULL;
+    beg->start = NULL;
+    beg->fragm = x.first;
+    beg->sizeB = 0;
+    beg->date_modf = time(0);
+
+    return beg;
 }
 
 /*
@@ -204,77 +223,4 @@ void memory::delete_node(node* del)
     // declaring node as non-existent
     *((short*)(mem[ del->fragm ])) = *((short*)(mem[ del->fragm ])) - 1; // in this fragment is one node less
     *((char*)(  (char*)del - 1)) = 0; // is not filled with node anymore
-}
-
-void memory::test_fff_fragment()
-{
-    printf("%d\n", fff_fragment()); // 1
-
-    for (int i = 1; i < 10; i++)
-    {
-        *((short*)(mem[i])) = 1;
-    }
-    printf("%d\n", fff_fragment()); // 10
-
-    *((short*)(mem[4])) = max_nodes_in_fragment;
-    *((short*)(mem[5])) = 0;
-    *((short*)(mem[7])) = SHRT_MAX;
-    printf("%d\n", fff_fragment()); // 5
-
-    *((short*)(mem[5])) = SHRT_MAX;
-    *((short*)(mem[10])) = 18;
-    printf("%d\n", fff_fragment()); // 11
-
-    for (int i = 1; i < fr_num - 1; i++)
-    {
-        *((short*)(mem[i])) = SHRT_MAX;
-    }
-    printf("%d\n", fff_fragment()); // 499
-
-    for (int i = 1; i < fr_num; i++)
-    {
-        *((short*)(mem[i])) = SHRT_MAX;
-    }
-    printf("%d\n", fff_fragment()); // -1
-}
-
-void memory::test_fff_field()
-{
-    pair<int, int> x;
-
-    x = fff_field();
-    printf("%d, %d\n", x.first, x.second); // 0, 1
-
-    for (int i = 0; i < 60; i++)
-        fff_field();
-    x = fff_field();
-    printf("%d, %d\n", x.first, x.second); // 1, 6
-
-    for (int i = 0; i < 49; i++)
-        fff_field();
-    x = fff_field();
-    printf("%d, %d\n", x.first, x.second); // 2, 0
-
-    printf("%d\n", fff_fragment()); // 3
-    for (int i = 0; i < 55; i++)
-        fff_field();
-    x = fff_field();
-    printf("%d, %d\n", x.first, x.second); // 4, 0
-
-    delete_node( (node*)(mem[0] + 3) );
-    x = fff_field();
-    printf("%d, %d\n", x.first, x.second); // 0, 3
-
-    printf("\n");
-
-    for (int i = 0; i < fr_num; i++)
-    {
-        printf("%d: %hd\n", i, *((short*)(mem[i])));
-        for (int j = 2; j < fr_mem * 1024; j++)
-        {
-            if ( *((char*)(mem[i] + j)) != 0 )
-                printf("%d: %d;\n", j, *((char*)(mem[i] + j)));
-        }
-        printf("\n");
-    }
 }

@@ -19,6 +19,7 @@ using namespace std;
 
 node* dest_prnt;
 string dest_name;
+bool same;
 
 /*
     Inform if input is not correct.
@@ -40,6 +41,9 @@ node* commands::find_son(node* parent, char* son_name)
 
     if (!strcmp(son_name, "..")) // go back
         return parent->parent;
+
+    if (!strcmp(son_name, "."))
+        return parent;
 
     node* nxt = parent->younger;
     while (nxt != NULL) // finding that directory or file
@@ -75,17 +79,20 @@ void commands::destination(memory* part, node* root, node* curr, string dest)
     while ((pos = dest.find(delimiter)) != string::npos)
     {
         token = dest.substr(0, pos);
-        if (!strcmp(token.c_str(), ".."))
-            curr = curr->parent;
-        else
+        if (strcmp(token.c_str(), ".")) // do not stay in the same directory
         {
-            curr = find_son(curr, (char*)token.c_str());
-            if (curr == NULL || !curr->folder)
+            if (strcmp(token.c_str(), "..")) // go to parent
             {
-                dest_prnt = curr;
-                dest_name = dest;
-                return;
+                curr = find_son(curr, (char*)token.c_str());
+                if (curr == NULL || !curr->folder)
+                {
+                    dest_prnt = curr;
+                    dest_name = dest;
+                    return;
+                }
             }
+            else
+                curr = curr->parent;
         }
         dest.erase(0, pos + delimiter.length());
     }
@@ -216,18 +223,31 @@ void commands::_make_file(memory* part, node* curr, string sub)
 /*
     del
 */
-void commands::_delete(memory* part, node* curr)
+void commands::_delete(memory* part, node* root, node* curr, node* del)
 {
-    if (curr == NULL)
-        return;
+    if (del == curr) // deleting directory that is current directory
+        same = false;
 
-    node* nxt = curr->younger;
+    if (del == NULL)
+    {
+        input_error();
+        return;
+    }
+
+    if (del == root)
+    {
+        printf("Must not delete this directory!\n");
+        return;
+    }
+
+    node* nxt = del->younger;
     while (nxt != NULL)
     {
-        part->delete_node(nxt);
+        _delete(part, root, curr, nxt);
         nxt = nxt->older_to;
     }
-    part->delete_node(curr);
+
+    part->delete_node(del);
 }
 
 /*
@@ -463,7 +483,10 @@ void commands::read_commands(memory* part, node* curr, node* root)
                     destination(part, root, curr, dest);
                     node* nxt;
                     nxt = find_son(dest_prnt, (char*)dest_name.c_str());
-                    _delete(part, nxt);
+                    same = true;
+                    _delete(part, root, curr, nxt);
+                    if (!same)
+                        curr = nxt->parent;
                 }
                 else
                     input_error();

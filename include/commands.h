@@ -31,7 +31,7 @@ class commands
         node* _change_directory(node* curr);
         void _make_directory(memory* part, node* curr, std::string sub);
         void _make_file(memory* part, node* curr, std::string sub);
-        void _delete(memory* part, node* curr);
+        void _delete(memory* part, node* root, node* curr, node* del);
         void _copy(node* from, node* cop, node* to);
 
         void print_path(node* curr, node* root);
