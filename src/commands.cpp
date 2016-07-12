@@ -35,6 +35,12 @@ void commands::input_error()
 */
 node* commands::find_son(node* parent, char* son_name)
 {
+    if (parent == NULL)
+        return NULL;
+
+    if (!strcmp(son_name, "..")) // go back
+        return parent->parent;
+
     node* nxt = parent->younger;
     while (nxt != NULL) // finding that directory or file
     {
@@ -52,8 +58,6 @@ node* commands::find_son(node* parent, char* son_name)
 */
 void commands::destination(memory* part, node* root, node* curr, string dest)
 {
-    // BEGIN
-
     string delimiter = "/";
 
     size_t pos = 0;
@@ -86,53 +90,8 @@ void commands::destination(memory* part, node* root, node* curr, string dest)
         dest.erase(0, pos + delimiter.length());
     }
 
-    // END
-
     dest_prnt = curr;
     dest_name = dest;
-    return;
-
-//    node* parent = curr;
-//    curr = find_son(curr, (char*)dest.c_str());
-//
-//    if (exist) // has to exist
-//    {
-//        if (!strcmp(dest.c_str(), ".."))
-//            return curr->parent;
-//
-//        if (curr == NULL) // if is does not exist
-//        {
-//            return NULL;
-//        }
-//        else
-//        {
-//            if (folder)
-//            {
-//                if (!curr->folder)
-//                    return curr;
-//                else
-//                    return NULL;
-//            }
-//        }
-//    }
-//    else // must not exist
-//    {
-//        if (curr != NULL)
-//        {
-//            return NULL;
-//        }
-//        else
-//        {
-//            if (folder)
-//            {
-//                curr = part->create_node((char*)dest.c_str(), true, parent, parent, parent->younger);
-//            }
-//            else
-//            {
-//                curr = part->create_node((char*)dest.c_str(), false, parent, parent, parent->younger);
-//            }
-//        }
-//    }
 }
 
 /*
@@ -140,6 +99,12 @@ void commands::destination(memory* part, node* root, node* curr, string dest)
 */
 void commands::_list_directory(node* curr)
 {
+    if (curr == NULL)
+        {
+            input_error();
+            return;
+        }
+
     node* nxt = curr->younger;
     if (nxt == NULL)
         printf("Empty directory.\n");
@@ -153,30 +118,14 @@ void commands::_list_directory(node* curr)
 /*
     cd
 */
-node* commands::_change_directory(node* curr, char* name)
+node* commands::_change_directory(node* curr)
 {
-    if (!strcmp(name, "..")) // go back
-        return curr->parent;
+    if (curr == NULL)
+        return NULL;
 
-    node* nxt = curr->younger;
-    while (nxt != NULL) // finding that directory
-    {
-        if (!strcmp(name, nxt->name))
-        {
-            if (!(nxt->folder))
-            {
-                input_error();
-                return curr;
-            }
-            else
-            {
-                return nxt;
-            }
-        }
-        nxt = nxt->older_to;
-    }
+    if (!curr->folder)
+        return NULL;
 
-    printf("No such file or directory.\n");
     return curr;
 }
 
@@ -185,6 +134,12 @@ node* commands::_change_directory(node* curr, char* name)
 */
 void commands::_make_directory(memory* part, node* curr, string sub)
 {
+    if (curr == NULL)
+    {
+        input_error();
+        return;
+    }
+
     if (sub.length() > 40)
         printf("Invalid name.\n");
     else
@@ -221,6 +176,12 @@ void commands::_make_directory(memory* part, node* curr, string sub)
 */
 void commands::_make_file(memory* part, node* curr, string sub)
 {
+    if (curr == NULL)
+    {
+        input_error();
+        return;
+    }
+
     if (sub.length() > 40)
         printf("Invalid name.\n");
     else
@@ -257,6 +218,9 @@ void commands::_make_file(memory* part, node* curr, string sub)
 */
 void commands::_delete(memory* part, node* curr)
 {
+    if (curr == NULL)
+        return;
+
     node* nxt = curr->younger;
     while (nxt != NULL)
     {
@@ -275,7 +239,7 @@ void commands::_copy(node* from, node* cop, node* to)
 }
 
 /*
-    Prints path before scanning command;
+    Prints path before scanning command.
 */
 void commands::print_path(node* curr, node* root)
 {
@@ -381,18 +345,30 @@ void commands::read_commands(memory* part, node* curr, node* root)
             } break;
         case 2: // list directory
             {
+                string dest;
+                string sub;
+                iss >> sub;
+                dest = sub;
+
                 int uk = 0;
                 while (iss)
                 {
-                    string sub;
                     iss >> sub;
                     uk++;
                 }
 
-                if (uk == 1)
-                    _list_directory(curr);
+                if (uk == 0)
+                    _list_directory(curr); // list current directory
                 else
-                    input_error();
+                {
+                    if (uk == 1) // list directory from path
+                    {
+                        destination(part, root, curr, dest);
+                        _list_directory( find_son(dest_prnt, (char*)dest_name.c_str()) );
+                    }
+                    else
+                        input_error();
+                }
 
             } break;
         case 3: // change directory
@@ -411,14 +387,12 @@ void commands::read_commands(memory* part, node* curr, node* root)
 
                 if (uk == 1)
                 {
-                    node* save_curr = curr;
                     destination(part, root, curr, dest);
-                    if (curr == NULL)
+                    node* nxt;
+                    if ( (nxt = _change_directory( find_son(dest_prnt, (char*)dest_name.c_str()) ) ) == NULL )
                         input_error();
                     else
-                    {
-                        curr = _change_directory(dest_prnt, (char*)dest_name.c_str());
-                    }
+                        curr = nxt;
                 }
                 else
                     input_error();
@@ -440,14 +414,8 @@ void commands::read_commands(memory* part, node* curr, node* root)
 
                 if (uk == 1)
                 {
-                    node* save_curr = curr;
                     destination(part, root, curr, dest);
-                    if (curr == NULL)
-                        input_error();
-                    else
-                    {
-                        _make_directory(part, dest_prnt, dest_name);
-                    }
+                    _make_directory(part, dest_prnt, dest_name);
                 }
                 else
                     input_error();
@@ -469,14 +437,8 @@ void commands::read_commands(memory* part, node* curr, node* root)
 
                 if (uk == 1)
                 {
-                    node* save_curr = curr;
                     destination(part, root, curr, dest);
-                    if (curr == NULL)
-                        input_error();
-                    else
-                    {
-                        _make_file(part, dest_prnt, dest_name);
-                    }
+                    _make_file(part, dest_prnt, dest_name);
                 }
                 else
                     input_error();
@@ -484,39 +446,28 @@ void commands::read_commands(memory* part, node* curr, node* root)
             } break;
         case 6: // delete
             {
-                char name[40];
+                string dest;
                 string sub;
                 iss >> sub;
-                strcpy(name, sub.c_str());
+                dest = sub;
 
                 int uk = 0;
                 while (iss)
                 {
-                    sub;
                     iss >> sub;
                     uk++;
                 }
 
                 if (uk == 1)
-                    {
-                        node* nxt = curr->younger;
-                        bool found = false;
-                        while (nxt != NULL && !found) // finding that directory
-                        {
-                            if (!strcmp(name, nxt->name))
-                                {
-                                    _delete(part, nxt);
-                                    found = true;
-                                }
-                            else
-                                nxt = nxt->older_to;
-                        }
-
-                        if (!found)
-                            printf("No such file or directory.\n");
-                    }
+                {
+                    destination(part, root, curr, dest);
+                    node* nxt;
+                    nxt = find_son(dest_prnt, (char*)dest_name.c_str());
+                    _delete(part, nxt);
+                }
                 else
                     input_error();
+
             } break;
         case 7: // copy
             {

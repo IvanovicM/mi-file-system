@@ -28,7 +28,7 @@ class commands
         void input_error();
 
         void _list_directory(node* curr);
-        node* _change_directory(node* curr, char* name);
+        node* _change_directory(node* curr);
         void _make_directory(memory* part, node* curr, std::string sub);
         void _make_file(memory* part, node* curr, std::string sub);
         void _delete(memory* part, node* curr);
