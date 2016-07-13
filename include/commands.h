@@ -37,6 +37,7 @@ class commands
         void print_path(node* curr, node* root);
         node* find_son(node* parent, char* son_name);
         void destination(memory* part, node* root, node* start_from, std::string dest);
+        void cp_file(memory* part, node* curr, char* extern_file_name);
         void map_commands();
         void read_commands(memory* part, node* curr, node* root);
 };

@@ -33,7 +33,9 @@
 		</Compiler>
 		<Unit filename="include/node.h" />
 		<Unit filename="include/tree.h" />
+		<Unit filename="src/commands.cpp" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/memory.cpp" />
 		<Unit filename="src/node.cpp" />
 		<Extensions>
 			<code_completion />

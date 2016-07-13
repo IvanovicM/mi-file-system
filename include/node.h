@@ -23,9 +23,9 @@ class node
         int indx; // its unique ID
         int fragm; // what fragment this node is in
         bool folder; // indicator for folders and files
-        int sizeB; // how gig this file or folder is
+        int sizeB; // how big this file or folder is
         time_t date_modf; // last date modified
-        void* start; // pointer to the beginning of a file if it is not a folder
+        int start; // int of the fragment that file starts from; 0 for end, in that fragment cannot be file because in that fragment is root
         node* parent; // its parent
 
         node* older_from; // node that is parent or is connected to parent and tells who is parent

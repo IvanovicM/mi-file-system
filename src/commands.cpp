@@ -10,6 +10,7 @@
 #include <map>
 #include <string>
 #include <string.h>
+#include <time.h>
 
 #include "../include/commands.h"
 #include "../include/node.h"
@@ -99,6 +100,41 @@ void commands::destination(memory* part, node* root, node* curr, string dest)
 
     dest_prnt = curr;
     dest_name = dest;
+}
+
+/*
+    Copy extern file to the current node.
+*/
+void commands::cp_file(memory* part, node* curr, char* extern_file_name)
+{
+    if (curr->folder)
+    {
+        printf("Cannot copy this file to directory.\n");
+        return;
+    }
+
+    FILE* file = fopen(extern_file_name, "rb"); // read binary
+
+    if (file == NULL)
+    {
+        printf("This file does not exist.\n");
+        return;
+    }
+
+    // delete file
+    part->delete_file(curr);
+
+    int buffer_size = 512; // 512B
+    char* buffer = new char[buffer_size];
+    int vl;
+    while (vl = fread(buffer, 1, buffer_size, file))
+    {
+        part->add_file(curr, buffer, vl);
+    }
+
+    delete[] buffer;
+
+    curr->date_modf = time(0); // last time updated
 }
 
 /*

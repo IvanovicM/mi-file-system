@@ -104,7 +104,7 @@ int memory::fff_fragment()
         if ( *((short*)(mem[i])) == 0 )
         {
             *((short*)(mem[i])) = SHRT_MAX;
-            *((void**)(mem[i] + fr_mem * 1024 - 4)) = NULL;
+            *((int*)( (char*)(mem[i] + fr_mem * 1024 - 4)) ) = 64;
             return i;
         }
     }
@@ -140,7 +140,7 @@ node* memory::create_node(char* name, bool folder, node* parent, node* older_fro
 
     // when created
     beg->younger = NULL;
-    beg->start = NULL;
+    beg->start = 0;
     beg->fragm = x.first;
     beg->sizeB = 0;
     beg->date_modf = time(0);
@@ -170,7 +170,7 @@ node* memory::create_root()
 
     // when created
     beg->younger = NULL;
-    beg->start = NULL;
+    beg->start = 0;
     beg->fragm = x.first;
     beg->sizeB = 0;
     beg->date_modf = time(0);
@@ -179,19 +179,46 @@ node* memory::create_root()
 }
 
 /*
-    Function for deleting file
-
-    Input; pointer to node which is file that should be deleted
-
-    Output: /
+    Adding data to file.
 */
-void memory::delete_file(node* del)
+void memory::add_file(node* curr, char* buffer, int vl)
 {
-    while (del->start != NULL)
+    int sz = curr->sizeB;
+    int frnum = 0;
+    int frsz = fr_mem * 1024 - 2 - 4; // fr_mem - sizeof(short) - sizeof(int);
+
+    // find fragment for new data
+    int crfr = curr->start;
+    while (crfr != 0)
     {
-        *((short*)(mem[del->fragm])) = 0;
-        del->start = *((void**)(mem[del->fragm] + fr_mem * 1024 - 4));
+        crfr = *((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) ); // BISER
+        frnum++;
     }
+
+    int crsz = sz - frnum * frsz;
+    int j = 0;
+    for (int i = 0; i < vl; i++)
+    {
+        if (crsz == frsz)
+        {
+            crsz = 0; // reset
+            j = 0;
+            crfr = *((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) ) = fff_fragment();
+
+//            if (crfr == -1)
+//            {
+//                // optional
+//                // if file system is full
+//            }
+        }
+
+        crsz++;
+        *((char*)(mem[crfr] + 2 + crsz + j)) = buffer[i];
+
+        j++;
+    }
+
+    curr->sizeB += vl;
 }
 
 /*
@@ -223,4 +250,22 @@ void memory::delete_node(node* del)
     // declaring node as non-existent
     *((short*)(mem[ del->fragm ])) = *((short*)(mem[ del->fragm ])) - 1; // in this fragment is one node less
     *((char*)(  (char*)del - 1)) = 0; // is not filled with node anymore
+}
+
+/*
+    Function for deleting file
+
+    Input; pointer to node which is file that should be deleted
+
+    Output: /
+*/
+void memory::delete_file(node* del)
+{
+    while (del->start != 0)
+    {
+        *((short*)(mem[del->start])) = 0; // empty fragment
+        del->start = *((int*)( (char*)(mem[del->start] + fr_mem * 1024 - 4)) );
+    }
+
+    del->sizeB = 0;
 }

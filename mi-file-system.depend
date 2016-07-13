@@ -18,7 +18,7 @@
 	<time.h>
 	"../include/node.h"
 
-1468249672 d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\include\node.h
+1468426149 d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\include\node.h
 	<stdio.h>
 	<cstdlib>
 	<time.h>
@@ -27,7 +27,7 @@
 
 1467990589 D
 
-1468335271 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\main.cpp
+1468441273 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\main.cpp
 	<stdio.h>
 	<cstdlib>
 	<map>
@@ -60,7 +60,7 @@
 	<limits.h>
 	"../include/node.h"
 
-1468332861 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\commands.cpp
+1468442910 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\commands.cpp
 	<stdio.h>
 	<iostream>
 	<sstream>
@@ -68,11 +68,12 @@
 	<map>
 	<string>
 	<string.h>
+	<time.h>
 	"../include/commands.h"
 	"../include/node.h"
 	"../include/memory.h"
 
-1468332730 d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\include\commands.h
+1468427464 d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\include\commands.h
 	<stdio.h>
 	<cstdlib>
 	<map>
@@ -81,12 +82,12 @@
 	"../include/node.h"
 	"../include/memory.h"
 
-1468335326 d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\include\memory.h
+1468442920 d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\include\memory.h
 	<stdio.h>
 	<cstdlib>
 	"../include/node.h"
 
-1468335326 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\memory.cpp
+1468441474 source:d:\1 marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\src\memory.cpp
 	<stdio.h>
 	<cstdlib>
 	<map>
