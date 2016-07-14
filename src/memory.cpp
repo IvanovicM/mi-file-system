@@ -204,7 +204,8 @@ void memory::add_extern_file(node* curr, char* buffer, int vl)
         {
             crsz = 0; // reset
             j = 0;
-            crfr = *((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) ) = fff_fragment();
+            *((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) ) = fff_fragment();
+            crfr = *((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) );
 
 //            if (crfr == -1)
 //            {

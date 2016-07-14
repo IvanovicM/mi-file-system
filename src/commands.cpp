@@ -283,6 +283,8 @@ void commands::_cp_extern_file(memory* part, node* curr, char* extern_file_name)
 
     delete[] buffer;
 
+    fclose(file);
+
     curr->date_modf = time(0); // last time updated
 }
 
@@ -308,7 +310,7 @@ void commands::_cp_intern_file(memory* part, node* from, node* curr)
 }
 
 /*
-    Prints path before scanning command.
+    Print path before scanning command.
 */
 void commands::print_path(node* curr, node* root)
 {
@@ -319,6 +321,37 @@ void commands::print_path(node* curr, node* root)
     }
     else
         printf("%s:", curr->name);
+}
+
+/*
+    Print file.
+*/
+void commands::print_file(memory* part, node* curr)
+{
+    if (curr->folder)
+    {
+        printf("This is not a file.\n");
+        return;
+    }
+
+    int frsz = fr_mem * 1024 - 2 - 4; // fr_mem - sizeof(short) - sizeof(int);
+    int from_fr = curr->start;
+
+    //node
+    curr->print_node();
+
+    // file
+    while (from_fr != 0)
+    {
+        for (int i = 0; i < frsz; i++)
+        {
+            printf("%c", *((char*)(part->mem[from_fr] + 2 + i)) );
+        }
+
+        from_fr = *((int*)( (char*)(part->mem[from_fr] + fr_mem * 1024 - 4)) );
+    }
+
+    printf("\n");
 }
 
 /*
@@ -592,7 +625,6 @@ void commands::read_commands(memory* part, node* curr, node* root)
                         else
                         {
                             // not specified what file to copy to
-                            printf("-ext, ali nije dobar file izabran\n");
                             input_error();
                         }
                     }
@@ -634,14 +666,12 @@ void commands::read_commands(memory* part, node* curr, node* root)
                         }
                         else
                         {
-                            printf("nije prepoznat option\n");
                             input_error();
                         }
                     }
                 }
                 else
                     {
-                        printf("nije ukucan trazeni broj reci\n");
                         input_error();
                     }
             } break;
@@ -666,11 +696,11 @@ void commands::read_commands(memory* part, node* curr, node* root)
                     if ( ( nxt = find_son(dest_prnt, (char*)dest_name.c_str()) ) == NULL )
                         input_error();
                     else
-                        nxt->print_file(part);
+                        print_file(part, nxt);
                 }
                 else
                     input_error();
-            }
+            } break;
         default:
             {
                 input_error();

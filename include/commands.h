@@ -36,6 +36,7 @@ class commands
         void _cp_intern_file(memory* part, node* from, node* curr);
 
         void print_path(node* curr, node* root);
+        void print_file(memory* part, node* curr);
         node* find_son(node* parent, char* son_name);
         void destination(memory* part, node* root, node* start_from, std::string dest);
         void map_commands();
