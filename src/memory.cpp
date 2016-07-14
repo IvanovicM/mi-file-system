@@ -197,13 +197,11 @@ void memory::add_extern_file(node* curr, char* buffer, int vl)
 
     // putting data to this file
     int crsz = sz - frnum * frsz;
-    int j = 0;
     for (int i = 0; i < vl; i++)
     {
         if (crsz == frsz)
         {
             crsz = 0; // reset
-            j = 0;
             *((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) ) = fff_fragment();
             crfr = *((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) );
 
@@ -214,10 +212,8 @@ void memory::add_extern_file(node* curr, char* buffer, int vl)
 //            }
         }
 
+        *((char*)(mem[crfr] + 2 + crsz)) = buffer[i];
         crsz++;
-        *((char*)(mem[crfr] + 2 + crsz + j)) = buffer[i];
-
-        j++;
     }
 
     curr->sizeB += vl;

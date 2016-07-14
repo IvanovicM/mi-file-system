@@ -33,7 +33,9 @@ class commands
         void _make_file(memory* part, node* curr, std::string sub);
         void _delete(memory* part, node* root, node* curr, node* del);
         void _cp_extern_file(memory* part, node* curr, char* extern_file_name);
-        void _cp_intern_file(memory* part, node* from, node* curr);
+        void _cp_intern_file(memory* part, node* from, node* to);
+
+        void __help(std::string cmd);
 
         void print_path(node* curr, node* root);
         void print_file(memory* part, node* curr);

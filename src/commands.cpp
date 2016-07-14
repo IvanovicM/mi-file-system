@@ -30,6 +30,7 @@ void commands::input_error()
     // wrong command
     printf("Wrong command!\n");
     // recommend help
+    printf("For help type \"help\".\n");
 }
 
 /*
@@ -293,20 +294,71 @@ void commands::_cp_extern_file(memory* part, node* curr, char* extern_file_name)
 
     Copy file from this file system to the current node.
 */
-void commands::_cp_intern_file(memory* part, node* from, node* curr)
+void commands::_cp_intern_file(memory* part, node* from, node* to)
 {
     if (from->folder)
     {
         printf("This is not a file.\n");
-        part->delete_node(curr);
+        part->delete_node(to);
         return;
     }
 
     // delete file
-    part->delete_file(curr);
-    part->add_intern_file(from, curr);
+    part->delete_file(to);
+    part->add_intern_file(from, to);
 
-    curr->date_modf = time(0); // last time updated
+    to->date_modf = time(0); // last time updated
+}
+
+/*
+    Help user to use commands.
+*/
+void commands::__help(string cmd)
+{
+    switch ( mm[cmd] )
+    {
+    case 1: // exit
+        {
+            printf("If you want to quit type \"exit\".\n");
+        }break;
+    case 2: // ld
+        {
+            printf(".\n");
+        }break;
+    case 3: // cd
+        {
+            printf(".\n");
+        }break;
+    case 4: // mkdir
+        {
+            printf(".\n");
+        }break;
+    case 5: // mkfile
+        {
+            printf(".\n");
+        }break;
+    case 6: // del
+        {
+            printf(".\n");
+        }break;
+    case 7: // cp
+        {
+            printf(".\n");
+        }break;
+    case 8: // pt
+        {
+            printf(".\n");
+        }break;
+    case 9: // help
+        {
+            printf("List of commands:\n\texit\n\tld\n\tcd\n\tmkdir\n\tmkfile\n\tdel\n\tcp\n\tpt\n\thelp.\n");
+            printf("If you want to see how to use each of commands, type \"help command\".\n");
+        }break;
+    default:
+        {
+            input_error();
+        }
+    }
 }
 
 /*
@@ -336,16 +388,18 @@ void commands::print_file(memory* part, node* curr)
 
     int frsz = fr_mem * 1024 - 2 - 4; // fr_mem - sizeof(short) - sizeof(int);
     int from_fr = curr->start;
+    int sz = curr->sizeB;
 
-    //node
-    curr->print_node();
+    //node; optional
+    // curr->print_node();
 
     // file
-    while (from_fr != 0)
+    while (from_fr != 0 && sz)
     {
-        for (int i = 0; i < frsz; i++)
+        for (int i = 0; i < frsz && sz; i++)
         {
             printf("%c", *((char*)(part->mem[from_fr] + 2 + i)) );
+            sz--;
         }
 
         from_fr = *((int*)( (char*)(part->mem[from_fr] + fr_mem * 1024 - 4)) );
@@ -364,6 +418,7 @@ void commands::print_file(memory* part, node* curr)
         del - 6
         cp - 7
         pt - 8
+        help - 9
 */
 void commands::map_commands()
 {
@@ -375,6 +430,7 @@ void commands::map_commands()
     mm["del"] = 6;
     mm["cp"] = 7;
     mm["pt"] = 8;
+    mm["help"] = 9;
 }
 
 /*
@@ -608,12 +664,12 @@ void commands::read_commands(memory* part, node* curr, node* root)
                     uk++;
                 }
 
+                // D:\FS\from.txt
+
                 if (uk == 1)
                 {
                     if (option == "-ext")
                     {
-                        // D:\FS\from.txt
-
                         destination(part, root, curr, dest);
                         node* to = find_son(dest_prnt, (char*)dest_name.c_str());
                         if (dest_prnt != NULL && to == NULL) // should make new file in existing directory
@@ -632,24 +688,26 @@ void commands::read_commands(memory* part, node* curr, node* root)
                     {
                         if (option == "-int")
                         {
-                            destination(part, root, curr, dest);
+                            destination(part, root, curr, file);
                             node* from = find_son(dest_prnt, (char*)dest_name.c_str());
-                            if (from != NULL || from->folder)
+                            if (from != NULL && !from->folder)
                             {
                                 // file that exists
-                                destination(part, root, curr, file);
+                                destination(part, root, curr, dest);
                                 node* to = find_son(dest_prnt, (char*)dest_name.c_str());
-                                if (to != NULL || to->folder)
+                                if (to != NULL && to->folder) // should copy to directory 'to'
                                 {
-                                    node* crt = part->create_node(from->name, false, to, to, to->younger);
-                                    part->add_intern_file(from, crt);
+                                    _make_file(part, to, from->name);
+                                    node* cf = find_son(to, from->name);
+                                    part->add_intern_file(from, cf);
                                 }
                                 else
                                 {
-                                    if (to == NULL)
+                                    if (to == NULL) // should copy to file 'to'
                                     {
-                                        node* crt = part->create_node((char*)dest_name.c_str(), false, dest_prnt, dest_prnt, dest_prnt->younger);
-                                        part->add_intern_file(from, crt);
+                                        _make_file(part, dest_prnt, dest_name);
+                                        node* cf = find_son(dest_prnt, (char*)dest_name.c_str());
+                                        part->add_intern_file(from, cf);
                                     }
                                     else
                                     {
@@ -660,7 +718,6 @@ void commands::read_commands(memory* part, node* curr, node* root)
                             else
                             {
                                 // want to copy file that does not exist or is a directory
-                                 printf("-int, ali ne postoji taj fajl\n");
                                 input_error();
                             }
                         }
@@ -700,6 +757,32 @@ void commands::read_commands(memory* part, node* curr, node* root)
                 }
                 else
                     input_error();
+            } break;
+        case 9: // help
+            {
+                string hp_cmd;
+                string sub;
+                iss >> sub;
+                hp_cmd = sub;
+
+                int uk = 0;
+                while (iss)
+                {
+                    iss >> sub;
+                    uk++;
+                }
+
+                if (uk == 0)
+                    __help("help"); // list current directory
+                else
+                {
+                    if (uk == 1) // list directory from path
+                    {
+                        __help(hp_cmd);
+                    }
+                    else
+                        input_error();
+                }
             } break;
         default:
             {
