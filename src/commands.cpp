@@ -323,36 +323,57 @@ void commands::__help(string cmd)
         }break;
     case 2: // ld
         {
-            printf(".\n");
+            printf("ld [directory_name]\n");
+            printf("ld [path][directory_name]\n");
         }break;
     case 3: // cd
         {
-            printf(".\n");
+            printf("cd [..]\n");
+            printf("cd [directory_name]\n");
+            printf("cd [path][directory_name]\n");
         }break;
     case 4: // mkdir
         {
-            printf(".\n");
+            printf("mkdir [directory_name]\n");
+            printf("mkdir [path][directory_name]\n");
         }break;
     case 5: // mkfile
         {
-            printf(".\n");
+            printf("mkfile [file_name]\n");
+            printf("mkfile [path][file_name]\n");
         }break;
     case 6: // del
         {
-            printf(".\n");
+            printf("del [directory/file_name]\n");
+            printf("del [path][directory/file_name]\n");
         }break;
     case 7: // cp
         {
-            printf(".\n");
+            printf("%-10s If you want to copy from extern file.\n", "cp -ext");
+            printf("cp -int [extern_file_name] [path][file_name]\n");
+
+            printf("\n");
+
+            printf("%-10s If you want to copy from intern file.\n", "cp -int");
+            printf("cp -int [path][file_name] [path][file_name]\n");
+            printf("cp -int [path][file_name] [path][directory_name]\n");
         }break;
     case 8: // pt
         {
-            printf(".\n");
+            printf("pt [file_name]\n");
+            printf("pt [path][file_name]\n");
         }break;
     case 9: // help
         {
-            printf("List of commands:\n\texit\n\tld\n\tcd\n\tmkdir\n\tmkfile\n\tdel\n\tcp\n\tpt\n\thelp.\n");
-            printf("If you want to see how to use each of commands, type \"help command\".\n");
+            printf("For more information on a specific command, type \"help command-name\".\n");
+            printf("%-10s Changes the current directory.\n", "cd");
+            printf("%-10s Copies one file to another location.\n", "cp");
+            printf("%-10s Deletes one file.\n", "del");
+            printf("%-10s Quits.\n", "exit");
+            printf("%-10s Displays a list of files and subdirectories in a directory.\n", "ld");
+            printf("%-10s Creates an empty directory.\n", "mkdir");
+            printf("%-10s Creates an empty file.\n", "mkfile");
+            printf("%-10s Prints a text file.\n", "pt");
         }break;
     default:
         {
@@ -437,31 +458,34 @@ void commands::map_commands()
     List of commands:
         exit
             code: 1
-            ex: root> exit
+            ex: R> exit
         ld (read-only) - List Directory - list everything that is inside selected directory
             code: 2
-            ex: root> ld
+            ex: R> ld
                 list everything in folder root
         cd (read-only) - Change Directory - go to selected directory
             code: 3
-            ex: root> cd my-folder
+            ex: R> cd my-folder
                 go to my-folder if it exists in folder root
         mkdir - Make Directory - make new directory
             code: 4
-            ex: root> mkdir my-folder
+            ex: R> mkdir my-folder
                 make folder my-folder in folder root
         mkfile - Make File
             code: 5
-            ex: root> mkfile my-file.txt
+            ex: R> mkfile my-file.txt
                 create new file whose name is 'my-file.txt'
         del - Delete - delete selected file or folder
             code: 6
-            ex: root> del my-folder
+            ex: R> del my-folder
                 delete my-folder and recursive everything inside
         cp - Copy
             code: 7
-            ex: root> cp file.txt root/a/b
+            ex: R> cp D:\FS\from.txt /a/b
                 copies file.txt that was in root to folder root/a/b
+        pt - Print
+            code: 8
+            ex:
 */
 void commands::read_commands(memory* part, node* curr, node* root)
 {
@@ -664,8 +688,6 @@ void commands::read_commands(memory* part, node* curr, node* root)
                     uk++;
                 }
 
-                // D:\FS\from.txt
-
                 if (uk == 1)
                 {
                     if (option == "-ext")
@@ -776,7 +798,7 @@ void commands::read_commands(memory* part, node* curr, node* root)
                     __help("help"); // list current directory
                 else
                 {
-                    if (uk == 1) // list directory from path
+                    if (uk == 1 && hp_cmd != "help") // list directory from path
                     {
                         __help(hp_cmd);
                     }
