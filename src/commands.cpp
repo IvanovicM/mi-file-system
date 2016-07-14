@@ -272,10 +272,13 @@ void commands::_cp_extern_file(memory* part, node* curr, char* extern_file_name)
 
     int buffer_size = 512; // 512B
     char* buffer = new char[buffer_size];
-    int vl;
-    while (vl = fread(buffer, 1, buffer_size, file))
+    int vl = fread(buffer, 1, buffer_size, file);
+    if (vl) // if file is not empty
+        curr->start = part->fff_fragment();
+    while (vl)
     {
         part->add_extern_file(curr, buffer, vl);
+        vl = fread(buffer, 1, buffer_size, file);
     }
 
     delete[] buffer;
@@ -327,6 +330,7 @@ void commands::print_path(node* curr, node* root)
         mkfile - 5
         del - 6
         cp - 7
+        pt - 8
 */
 void commands::map_commands()
 {
@@ -337,6 +341,7 @@ void commands::map_commands()
     mm["mkfile"] = 5;
     mm["del"] = 6;
     mm["cp"] = 7;
+    mm["pt"] = 8;
 }
 
 /*
@@ -545,15 +550,18 @@ void commands::read_commands(memory* part, node* curr, node* root)
                 string file;
                 string dest;
 
+                // regognize option
                 iss >> sub;
                 option = sub;
 
+                // regognize file that should be copied
                 if (iss)
                 {
                     iss >> sub;
                     file = sub;
                 }
 
+                // regognize destination that file should be copied to
                 if (iss)
                 {
                     iss >> sub;
@@ -571,64 +579,99 @@ void commands::read_commands(memory* part, node* curr, node* root)
                 {
                     if (option == "-ext")
                     {
+                        // D:\FS\from.txt
+
                         destination(part, root, curr, dest);
-                        node* nd = find_son(dest_prnt, (char*)dest_name.c_str());
-                        if (nd == NULL) // should make new folder
+                        node* to = find_son(dest_prnt, (char*)dest_name.c_str());
+                        if (dest_prnt != NULL && to == NULL) // should make new file in existing directory
                         {
-                            _cp_extern_file(part, part->create_node((char*)dest_name.c_str(), false, dest_prnt, dest_prnt, dest_prnt->younger), (char*)file.c_str());
+                            _make_file(part, dest_prnt, dest_name);
+                            node* cf = find_son(dest_prnt, (char*)dest_name.c_str());
+                            _cp_extern_file(part, cf, (char*)file.c_str());
                         }
                         else
                         {
                             // not specified what file to copy to
+                            printf("-ext, ali nije dobar file izabran\n");
                             input_error();
                         }
-
                     }
                     else
                     {
-                        input_error();
-                    }
-                }
-                else
-                {
-                    if (option == "-int")
-                    {
-                        destination(part, root, curr, dest);
-                        node* from = find_son(dest_prnt, (char*)dest_name.c_str());
-                        if (from != NULL || nd->falder)
+                        if (option == "-int")
                         {
-                            // file that exists
-                            destination(part, root, curr, file);
-                            node* to = find_son(dest_prnt, (char*)dest_name.c_str());
-                            if (to != NULL || to->folder)
+                            destination(part, root, curr, dest);
+                            node* from = find_son(dest_prnt, (char*)dest_name.c_str());
+                            if (from != NULL || from->folder)
                             {
-                                node* crt = part->create_node(from->name, false, to, to, to->younger);
-                                add_intern_file(from, crt);
-                            }
-                            else
-                            {
-                                if (to == NULL)
+                                // file that exists
+                                destination(part, root, curr, file);
+                                node* to = find_son(dest_prnt, (char*)dest_name.c_str());
+                                if (to != NULL || to->folder)
                                 {
-                                    node* crt = part->create_node((char*)dest_name.c_str(), false, dest_prnt, dest_prnt, dest_prnt->younger);
-                                    add_intern_file(from, crt);
+                                    node* crt = part->create_node(from->name, false, to, to, to->younger);
+                                    part->add_intern_file(from, crt);
                                 }
                                 else
                                 {
-                                    input_error();
+                                    if (to == NULL)
+                                    {
+                                        node* crt = part->create_node((char*)dest_name.c_str(), false, dest_prnt, dest_prnt, dest_prnt->younger);
+                                        part->add_intern_file(from, crt);
+                                    }
+                                    else
+                                    {
+                                        input_error();
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                // want to copy file that does not exist or is a directory
+                                 printf("-int, ali ne postoji taj fajl\n");
+                                input_error();
                             }
                         }
                         else
                         {
-                            // want to copy file that does not exist or is a directory
+                            printf("nije prepoznat option\n");
                             input_error();
                         }
                     }
-                    else
-                        input_error();
                 }
+                else
+                    {
+                        printf("nije ukucan trazeni broj reci\n");
+                        input_error();
+                    }
             } break;
-            default:
+        case 8: // print
+            {
+                string dest;
+                string sub;
+                iss >> sub;
+                dest = sub;
+
+                int uk = 0;
+                while (iss)
+                {
+                    iss >> sub;
+                    uk++;
+                }
+
+                if (uk == 1)
+                {
+                    destination(part, root, curr, dest);
+                    node* nxt;
+                    if ( ( nxt = find_son(dest_prnt, (char*)dest_name.c_str()) ) == NULL )
+                        input_error();
+                    else
+                        nxt->print_file(part);
+                }
+                else
+                    input_error();
+            }
+        default:
             {
                 input_error();
             }

@@ -1,40 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="src\memory.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\commands.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="4772" topLine="78" />
+			<Cursor1 position="17409" topLine="178" />
 		</Cursor>
 		<Folding>
+			<Collapse line="28" />
+			<Collapse line="38" />
+			<Collapse line="64" />
+			<Collapse line="129" />
+			<Collapse line="143" />
+			<Collapse line="185" />
+			<Collapse line="227" />
+			<Collapse line="259" />
+			<Collapse line="294" />
+			<Collapse line="313" />
+			<Collapse line="335" />
+			<Collapse line="401" />
+			<Collapse line="417" />
+			<Collapse line="445" />
+			<Collapse line="472" />
+			<Collapse line="495" />
+			<Collapse line="518" />
+			<Collapse line="546" />
+			<Collapse line="558" />
+			<Collapse line="565" />
+		</Folding>
+	</File>
+	<File name="src\main.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="260" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="src\node.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="877" topLine="5" />
+		</Cursor>
+		<Folding>
+			<Collapse line="16" />
+			<Collapse line="31" />
+		</Folding>
+	</File>
+	<File name="include\commands.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="721" topLine="17" />
+		</Cursor>
+	</File>
+	<File name="include\memory.h" open="1" top="1" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="596" topLine="26" />
+		</Cursor>
+	</File>
+	<File name="src\memory.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6683" topLine="17" />
+		</Cursor>
+		<Folding>
+			<Collapse line="24" />
 			<Collapse line="35" />
 			<Collapse line="62" />
 			<Collapse line="100" />
 			<Collapse line="122" />
 			<Collapse line="154" />
+			<Collapse line="275" />
+			<Collapse line="293" />
 		</Folding>
 	</File>
 	<File name="include\node.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="758" topLine="12" />
-		</Cursor>
-	</File>
-	<File name="src\commands.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="366" topLine="25" />
-		</Cursor>
-		<Folding>
-			<Collapse line="37" />
-			<Collapse line="63" />
-		</Folding>
-	</File>
-	<File name="src\main.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="13" />
-		</Cursor>
-	</File>
-	<File name="src\node.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="352" topLine="3" />
+			<Cursor1 position="597" topLine="24" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

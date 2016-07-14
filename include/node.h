@@ -12,6 +12,8 @@
 #include <string>
 #include <string.h>
 
+#include "../include/memory.h"
+
 /*
     Each object of this class is folder or file in mi-file-system.
 */
@@ -35,6 +37,7 @@ class node
     public:
         std::string last_date_modf();
         void print_node();
+        void print_file(memory* part);
 };
 
 #endif

@@ -104,7 +104,7 @@ int memory::fff_fragment()
         if ( *((short*)(mem[i])) == 0 )
         {
             *((short*)(mem[i])) = SHRT_MAX;
-            *((int*)( (char*)(mem[i] + fr_mem * 1024 - 4)) ) = 64;
+            *((int*)( (char*)(mem[i] + fr_mem * 1024 - 4)) ) = 0;
             return i;
         }
     }
@@ -185,16 +185,17 @@ void memory::add_extern_file(node* curr, char* buffer, int vl)
 {
     int sz = curr->sizeB;
     int frnum = 0;
-    int frsz = fr_mem * 1024 - 2 - 4; // fr_mem - sizeof(short) - sizeof(int);
+    int frsz = fr_mem * 1024 - 2 - 4; // fr_mem - sizeof(short)[indicator at the beginning] - sizeof(int)[pointer to the continuation of the file];
 
     // find fragment for new data
     int crfr = curr->start;
-    while (crfr != 0)
+    while (*((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) ) != 0)
     {
-        crfr = *((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) ); // BISER
+        crfr = *((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) );
         frnum++;
     }
 
+    // putting data to this file
     int crsz = sz - frnum * frsz;
     int j = 0;
     for (int i = 0; i < vl; i++)
@@ -224,8 +225,13 @@ void memory::add_extern_file(node* curr, char* buffer, int vl)
 /*
     Adding data to file from this file system.
 */
-void add_intern_file(node* from, node* curr)
+void memory::add_intern_file(node* from, node* curr)
 {
+    if (from == NULL)
+    {
+        delete_node(curr);
+    }
+
     int from_fr = from->start;
     int frsz = fr_mem * 1024 - 2 - 4; // fr_mem - sizeof(short) - sizeof(int);
 
@@ -260,6 +266,24 @@ void add_intern_file(node* from, node* curr)
 }
 
 /*
+    Function for deleting file
+
+    Input; pointer to node which is file that should be deleted
+
+    Output: /
+*/
+void memory::delete_file(node* del)
+{
+    while (del->start != 0)
+    {
+        *((short*)(mem[del->start])) = 0; // empty fragment
+        del->start = *((int*)( (char*)(mem[del->start] + fr_mem * 1024 - 4)) );
+    }
+
+    del->sizeB = 0;
+}
+
+/*
     Function for deleting node
 
     Input: pointer to node that should be deleted
@@ -288,22 +312,4 @@ void memory::delete_node(node* del)
     // declaring node as non-existent
     *((short*)(mem[ del->fragm ])) = *((short*)(mem[ del->fragm ])) - 1; // in this fragment is one node less
     *((char*)(  (char*)del - 1)) = 0; // is not filled with node anymore
-}
-
-/*
-    Function for deleting file
-
-    Input; pointer to node which is file that should be deleted
-
-    Output: /
-*/
-void memory::delete_file(node* del)
-{
-    while (del->start != 0)
-    {
-        *((short*)(mem[del->start])) = 0; // empty fragment
-        del->start = *((int*)( (char*)(mem[del->start] + fr_mem * 1024 - 4)) );
-    }
-
-    del->sizeB = 0;
 }

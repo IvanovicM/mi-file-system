@@ -31,8 +31,9 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="include/commands.h" />
+		<Unit filename="include/memory.h" />
 		<Unit filename="include/node.h" />
-		<Unit filename="include/tree.h" />
 		<Unit filename="src/commands.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/memory.cpp" />

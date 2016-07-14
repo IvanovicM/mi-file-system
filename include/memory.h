@@ -28,8 +28,8 @@ class memory
         void* mem[fr_num]; // memory that file-system can use
         int node_num; // current node unique ID
         int max_nodes_in_fragment; // max number of nodes in fragments
-        node* root; // pointer to the root in tree
-        node* curr; // pointer to the current node in tree
+        node* root; // pointer to the root in the tree
+        node* curr; // pointer to the current node in the tree
 
         void initialize_mem();
         std::pair<int, int> fff_field();
