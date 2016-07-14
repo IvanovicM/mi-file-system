@@ -179,9 +179,9 @@ node* memory::create_root()
 }
 
 /*
-    Adding data to file.
+    Adding data to file from extern file.
 */
-void memory::add_file(node* curr, char* buffer, int vl)
+void memory::add_extern_file(node* curr, char* buffer, int vl)
 {
     int sz = curr->sizeB;
     int frnum = 0;
@@ -219,6 +219,44 @@ void memory::add_file(node* curr, char* buffer, int vl)
     }
 
     curr->sizeB += vl;
+}
+
+/*
+    Adding data to file from this file system.
+*/
+void add_intern_file(node* from, node* curr)
+{
+    int from_fr = from->start;
+    int frsz = fr_mem * 1024 - 2 - 4; // fr_mem - sizeof(short) - sizeof(int);
+
+    // start
+    int curr_fr;
+    if (from_fr != 0)
+    {
+        curr->start = curr_fr = fff_fragment();
+
+        for (int i = 0; i < frsz; i++)
+        {
+            *((char*)(mem[curr_fr] + 2 + i)) = *((char*)(mem[from_fr] + 2 + i));
+        }
+
+        from_fr = *((int*)( (char*)(mem[from_fr] + fr_mem * 1024 - 4)) );
+    }
+
+    // continue
+    while (from_fr != 0)
+    {
+        curr_fr = *((int*)( (char*)(mem[curr_fr] + fr_mem * 1024 - 4)) ) = fff_fragment();
+
+        for (int i = 0; i < frsz; i++)
+        {
+            *((char*)(mem[curr_fr] + 2 + i)) = *((char*)(mem[from_fr] + 2 + i));
+        }
+
+        from_fr = *((int*)( (char*)(mem[from_fr] + fr_mem * 1024 - 4)) );
+    }
+
+    curr->sizeB = from->sizeB;
 }
 
 /*

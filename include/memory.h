@@ -36,7 +36,8 @@ class memory
         int fff_fragment();
         node* create_node(char* name, bool folder, node* parent, node* older_from, node* older_to);
         node* create_root();
-        void add_file(node* curr, char* buffer, int vl);
+        void add_extern_file(node* curr, char* buffer, int vl);
+        void add_intern_file(node* from, node* curr);
         void delete_node(node* del);
         void delete_file(node* del);
 };

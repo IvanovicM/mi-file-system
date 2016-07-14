@@ -32,12 +32,12 @@ class commands
         void _make_directory(memory* part, node* curr, std::string sub);
         void _make_file(memory* part, node* curr, std::string sub);
         void _delete(memory* part, node* root, node* curr, node* del);
-        void _copy(node* from, node* cop, node* to);
+        void _cp_extern_file(memory* part, node* curr, char* extern_file_name);
+        void _cp_intern_file(memory* part, node* from, node* curr);
 
         void print_path(node* curr, node* root);
         node* find_son(node* parent, char* son_name);
         void destination(memory* part, node* root, node* start_from, std::string dest);
-        void cp_file(memory* part, node* curr, char* extern_file_name);
         void map_commands();
         void read_commands(memory* part, node* curr, node* root);
 };

@@ -87,7 +87,7 @@ void commands::destination(memory* part, node* root, node* curr, string dest)
                 curr = find_son(curr, (char*)token.c_str());
                 if (curr == NULL || !curr->folder)
                 {
-                    dest_prnt = curr;
+                    dest_prnt = NULL;
                     dest_name = dest;
                     return;
                 }
@@ -100,41 +100,6 @@ void commands::destination(memory* part, node* root, node* curr, string dest)
 
     dest_prnt = curr;
     dest_name = dest;
-}
-
-/*
-    Copy extern file to the current node.
-*/
-void commands::cp_file(memory* part, node* curr, char* extern_file_name)
-{
-    if (curr->folder)
-    {
-        printf("Cannot copy this file to directory.\n");
-        return;
-    }
-
-    FILE* file = fopen(extern_file_name, "rb"); // read binary
-
-    if (file == NULL)
-    {
-        printf("This file does not exist.\n");
-        return;
-    }
-
-    // delete file
-    part->delete_file(curr);
-
-    int buffer_size = 512; // 512B
-    char* buffer = new char[buffer_size];
-    int vl;
-    while (vl = fread(buffer, 1, buffer_size, file))
-    {
-        part->add_file(curr, buffer, vl);
-    }
-
-    delete[] buffer;
-
-    curr->date_modf = time(0); // last time updated
 }
 
 /*
@@ -287,11 +252,56 @@ void commands::_delete(memory* part, node* root, node* curr, node* del)
 }
 
 /*
-    cp
-*/
-void commands::_copy(node* from, node* cop, node* to)
-{
+    cp -ext
 
+    Copy extern file to the current node.
+*/
+void commands::_cp_extern_file(memory* part, node* curr, char* extern_file_name)
+{
+    FILE* file = fopen(extern_file_name, "rb"); // read binary
+
+    if (file == NULL)
+    {
+        printf("This file does not exist.\n");
+        part->delete_node(curr);
+        return;
+    }
+
+    // delete file
+    part->delete_file(curr);
+
+    int buffer_size = 512; // 512B
+    char* buffer = new char[buffer_size];
+    int vl;
+    while (vl = fread(buffer, 1, buffer_size, file))
+    {
+        part->add_extern_file(curr, buffer, vl);
+    }
+
+    delete[] buffer;
+
+    curr->date_modf = time(0); // last time updated
+}
+
+/*
+    cp -int
+
+    Copy file from this file system to the current node.
+*/
+void commands::_cp_intern_file(memory* part, node* from, node* curr)
+{
+    if (from->folder)
+    {
+        printf("This is not a file.\n");
+        part->delete_node(curr);
+        return;
+    }
+
+    // delete file
+    part->delete_file(curr);
+    part->add_intern_file(from, curr);
+
+    curr->date_modf = time(0); // last time updated
 }
 
 /*
@@ -530,9 +540,95 @@ void commands::read_commands(memory* part, node* curr, node* root)
             } break;
         case 7: // copy
             {
+                string sub;
+                string option;
+                string file;
+                string dest;
 
-            }
-        default:
+                iss >> sub;
+                option = sub;
+
+                if (iss)
+                {
+                    iss >> sub;
+                    file = sub;
+                }
+
+                if (iss)
+                {
+                    iss >> sub;
+                    dest = sub;
+                }
+
+                int uk = 0;
+                while (iss)
+                {
+                    iss >> sub;
+                    uk++;
+                }
+
+                if (uk == 1)
+                {
+                    if (option == "-ext")
+                    {
+                        destination(part, root, curr, dest);
+                        node* nd = find_son(dest_prnt, (char*)dest_name.c_str());
+                        if (nd == NULL) // should make new folder
+                        {
+                            _cp_extern_file(part, part->create_node((char*)dest_name.c_str(), false, dest_prnt, dest_prnt, dest_prnt->younger), (char*)file.c_str());
+                        }
+                        else
+                        {
+                            // not specified what file to copy to
+                            input_error();
+                        }
+
+                    }
+                    else
+                    {
+                        input_error();
+                    }
+                }
+                else
+                {
+                    if (option == "-int")
+                    {
+                        destination(part, root, curr, dest);
+                        node* from = find_son(dest_prnt, (char*)dest_name.c_str());
+                        if (from != NULL || nd->falder)
+                        {
+                            // file that exists
+                            destination(part, root, curr, file);
+                            node* to = find_son(dest_prnt, (char*)dest_name.c_str());
+                            if (to != NULL || to->folder)
+                            {
+                                node* crt = part->create_node(from->name, false, to, to, to->younger);
+                                add_intern_file(from, crt);
+                            }
+                            else
+                            {
+                                if (to == NULL)
+                                {
+                                    node* crt = part->create_node((char*)dest_name.c_str(), false, dest_prnt, dest_prnt, dest_prnt->younger);
+                                    add_intern_file(from, crt);
+                                }
+                                else
+                                {
+                                    input_error();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // want to copy file that does not exist or is a directory
+                            input_error();
+                        }
+                    }
+                    else
+                        input_error();
+                }
+            } break;
+            default:
             {
                 input_error();
             }
