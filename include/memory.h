@@ -12,7 +12,7 @@
 #include "../include/node.h"
 
 // constants for fragments (KB)
-#define full_mem 2000
+#define full_mem 1000000
 #define fr_mem 4
 #define fr_num full_mem/fr_mem
 
@@ -36,7 +36,7 @@ class memory
         int fff_fragment();
         node* create_node(char* name, bool folder, node* parent, node* older_from, node* older_to);
         node* create_root();
-        void add_extern_file(node* curr, char* buffer, int vl);
+        std::pair<int, int> add_extern_file(node* curr, char* buffer, int vl, int crfr, int frnum);
         void add_intern_file(node* from, node* curr);
         void delete_node(node* del);
         void delete_file(node* del);

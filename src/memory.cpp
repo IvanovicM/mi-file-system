@@ -15,7 +15,7 @@
 #include "../include/memory.h"
 
 // constants for fragments (KB)
-#define full_mem 2000
+#define full_mem 1000000
 #define fr_mem 4
 #define fr_num full_mem/fr_mem
 
@@ -181,19 +181,10 @@ node* memory::create_root()
 /*
     Adding data to file from extern file.
 */
-void memory::add_extern_file(node* curr, char* buffer, int vl)
+pair<int, int> memory::add_extern_file(node* curr, char* buffer, int vl, int crfr, int frnum)
 {
     int sz = curr->sizeB;
-    int frnum = 0;
     int frsz = fr_mem * 1024 - 2 - 4; // fr_mem - sizeof(short)[indicator at the beginning] - sizeof(int)[pointer to the continuation of the file];
-
-    // find fragment for new data
-    int crfr = curr->start;
-    while (*((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) ) != 0)
-    {
-        crfr = *((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) );
-        frnum++;
-    }
 
     // putting data to this file
     int crsz = sz - frnum * frsz;
@@ -204,6 +195,7 @@ void memory::add_extern_file(node* curr, char* buffer, int vl)
             crsz = 0; // reset
             *((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) ) = fff_fragment();
             crfr = *((int*)( (char*)(mem[crfr] + fr_mem * 1024 - 4)) );
+            frnum++;
 
 //            if (crfr == -1)
 //            {
@@ -217,6 +209,8 @@ void memory::add_extern_file(node* curr, char* buffer, int vl)
     }
 
     curr->sizeB += vl;
+
+    return make_pair(crfr, frnum);
 }
 
 /*

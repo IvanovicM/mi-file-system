@@ -11,10 +11,13 @@
 #include <string>
 #include <string.h>
 #include <time.h>
+#include <ctime>
 
 #include "../include/commands.h"
 #include "../include/node.h"
 #include "../include/memory.h"
+
+#define buffer_size 10000 // B
 
 using namespace std;
 
@@ -271,14 +274,20 @@ void commands::_cp_extern_file(memory* part, node* curr, char* extern_file_name)
     // delete file
     part->delete_file(curr);
 
-    int buffer_size = 512; // 512B
     char* buffer = new char[buffer_size];
     int vl = fread(buffer, 1, buffer_size, file);
+    int crfr;
+    int frnum = 0;
     if (vl) // if file is not empty
-        curr->start = part->fff_fragment();
+        {
+            curr->start = part->fff_fragment();
+            crfr = curr->start;
+        }
     while (vl)
     {
-        part->add_extern_file(curr, buffer, vl);
+        pair<int, int> x = part->add_extern_file(curr, buffer, vl, crfr, frnum);
+        crfr = x.first;
+        frnum = x.second;
         vl = fread(buffer, 1, buffer_size, file);
     }
 
@@ -462,15 +471,15 @@ void commands::map_commands()
         ld (read-only) - List Directory - list everything that is inside selected directory
             code: 2
             ex: R> ld
-                list everything in folder root
+                list everything in folder R
         cd (read-only) - Change Directory - go to selected directory
             code: 3
             ex: R> cd my-folder
-                go to my-folder if it exists in folder root
+                go to my-folder if it exists in folder R
         mkdir - Make Directory - make new directory
             code: 4
             ex: R> mkdir my-folder
-                make folder my-folder in folder root
+                make folder my-folder in folder R
         mkfile - Make File
             code: 5
             ex: R> mkfile my-file.txt
@@ -481,8 +490,10 @@ void commands::map_commands()
                 delete my-folder and recursive everything inside
         cp - Copy
             code: 7
-            ex: R> cp D:\FS\from.txt /a/b
-                copies file.txt that was in root to folder root/a/b
+            ex: R> cp -ext D:\FS\from.txt /a/b
+                copies extern file to folder /a/b/file
+                R> cp -ext D:\FS\from.txt /a/b
+                copies extern file to file /a/b/file
         pt - Print
             code: 8
             ex:
@@ -502,6 +513,9 @@ void commands::read_commands(memory* part, node* curr, node* root)
         // scan
         string line;
         getline(cin, line);
+
+        clock_t begin_t, end_t;
+        begin_t = clock();
 
         // parse
         istringstream iss(line);
@@ -811,6 +825,10 @@ void commands::read_commands(memory* part, node* curr, node* root)
                 input_error();
             }
         }
+
+        end_t = clock();
+        double dif = double(end_t - begin_t) / CLOCKS_PER_SEC;
+        printf ("Elasped time is %.2lf seconds.\n", dif );
 
         printf("\n");
     }
