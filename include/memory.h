@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <cstdlib>
+#include <vector>
 
 #include "../include/node.h"
 
@@ -24,6 +25,8 @@ class memory
 {
     public:
         memory();
+
+        std::vector<int> free_fr;
 
         void* mem[fr_num]; // memory that file-system can use
         int node_num; // current node unique ID

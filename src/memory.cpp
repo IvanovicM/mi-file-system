@@ -10,6 +10,7 @@
 #include <string.h>
 #include <limits.h>
 #include <time.h>
+#include <vector>
 
 #include "../include/node.h"
 #include "../include/memory.h"
@@ -34,20 +35,16 @@ memory::memory()
 */
 void memory::initialize_mem()
 {
-    for (int i = 0; i < fr_num; i++)
+    for (int i = fr_num - 1; i >= 0; i--)
     {
         mem[i] = malloc(fr_mem * 1024);
 
         // free fragment
         for(int j = 0; j < fr_mem * 1024; j++)
             *((char*)(mem[i] + j)) = 0;
-    }
 
-//    // test
-//    for (int i = 0; i < 200; i++)
-//    {
-//        printf("%d\n", *((char*)(mem[8] + i)));
-//    }
+        free_fr.push_back(i);
+    }
 }
 
 /*
@@ -78,16 +75,11 @@ pair<int, int> memory::fff_field()
         }
     }
 
-    // finding free fragment if necessary
-    for (int i = 0; i < fr_num; i++)
-    {
-        if ( *((short*)(mem[i])) == 0 )
-        {
-            *((short*)(mem[i])) = *((short*)(mem[i])) + 1; // in this field is one node added
-            *((char*)(mem[i] + 2)) = 1; // filled field with some node
-            return make_pair(i, 0);
-        }
-    }
+    int i = free_fr.back();
+    free_fr.pop_back();
+    *((short*)(mem[i])) = *((short*)(mem[i])) + 1; // in this field is one node added
+    *((char*)(mem[i] + 2)) = 1; // filled field with some node
+    return make_pair(i, 0);
 }
 
 /*
@@ -99,17 +91,9 @@ pair<int, int> memory::fff_field()
 */
 int memory::fff_fragment()
 {
-    for (int i = 0; i < fr_num; i++)
-    {
-        if ( *((short*)(mem[i])) == 0 )
-        {
-            *((short*)(mem[i])) = SHRT_MAX;
-            *((int*)( (char*)(mem[i] + fr_mem * 1024 - 4)) ) = 0;
-            return i;
-        }
-    }
-
-    return -1;
+    int i = free_fr.back();
+    free_fr.pop_back();
+    return i;
 }
 
 /*
@@ -153,6 +137,7 @@ node* memory::create_node(char* name, bool folder, node* parent, node* older_fro
 */
 node* memory::create_root()
 {
+    free_fr.pop_back();
     *((short*)(mem[0])) = *((short*)(mem[0])) + 1; // in this field is one node added
     *((char*)(mem[0] + 2)) = 1; // filled field with some node
 
@@ -267,8 +252,15 @@ void memory::delete_file(node* del)
 {
     while (del->start != 0)
     {
-        *((short*)(mem[del->start])) = 0; // empty fragment
-        del->start = *((int*)( (char*)(mem[del->start] + fr_mem * 1024 - 4)) );
+        free_fr.push_back(del->start);
+
+        // empty fragment
+        *((short*)(mem[del->start])) = 0;
+
+        // pointer to continue of file is NULL
+        int sl = *((int*)( (char*)(mem[del->start] + fr_mem * 1024 - 4)) );
+        *((int*)( (char*)(mem[del->start] + fr_mem * 1024 - 4)) ) = 0;
+        del->start = sl;
     }
 
     del->sizeB = 0;
@@ -302,5 +294,8 @@ void memory::delete_node(node* del)
 
     // declaring node as non-existent
     *((short*)(mem[ del->fragm ])) = *((short*)(mem[ del->fragm ])) - 1; // in this fragment is one node less
+    if (*((short*)(mem[ del->fragm ])) == 0)
+        free_fr.push_back(del->fragm);
+
     *((char*)(  (char*)del - 1)) = 0; // is not filled with node anymore
 }

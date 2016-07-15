@@ -828,7 +828,7 @@ void commands::read_commands(memory* part, node* curr, node* root)
 
         end_t = clock();
         double dif = double(end_t - begin_t) / CLOCKS_PER_SEC;
-        printf ("Elasped time is %.2lf seconds.\n", dif );
+        printf ("Elasped time is %.2lf seconds.\n", dif);
 
         printf("\n");
     }
