@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1476911251 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\src\main.cpp
+	<stdio.h>
+	"../include/kdtree.h"
+
+1476910720 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\src\kdtree.cpp
+	<stdio.h>
+	<algorithm>
+	"../include/kdtree.h"
+
+1476909166 d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\include\kdtree.h
+	<stdio.h>
+

@@ -1,6 +1,7 @@
 /*
     Marina Ivanovic
     Project in Petnica Science Center
+    year: 2016
 */
 
 #include <stdio.h>
@@ -828,7 +829,7 @@ void commands::read_commands(memory* part, node* curr, node* root)
 
         end_t = clock();
         double dif = double(end_t - begin_t) / CLOCKS_PER_SEC;
-        printf ("Elasped time is %.2lf seconds.\n", dif);
+        printf ("\nElasped time is %.2lf seconds.\n", dif);
 
         printf("\n");
     }

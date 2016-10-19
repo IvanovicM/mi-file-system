@@ -1,6 +1,7 @@
 /*
     Marina Ivanovic
     Project in Petnica Science Center
+    year: 2016
 */
 
 #ifndef __NODE
