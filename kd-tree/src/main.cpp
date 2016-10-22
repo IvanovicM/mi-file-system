@@ -5,15 +5,17 @@
 */
 
 #include <stdio.h>
+#include <utility>
 
 #include "../include/kdtree.h"
 
 using namespace std;
 
-void testQS(int n, kdtree* tree)
+void testQS(int n, pair<double, double>* g, kdtree* tree)
 {
-    int k = 0, l = 6, r = 6;
-    printf("%d-th element in the interval [%d, %d] of array is: %d.\n", k, l, r, tree->quickselect(l, r, k + l));
+    int k = 3, l = 2, r = 6;
+    pair<double, double> x = tree->quickselect(g, l, r, k + l, true);
+    printf("%d-th element in the interval [%d, %d] of array is: (%f %f).\n", k, l, r, x.first, x.second);
 }
 
 int main()
@@ -22,13 +24,16 @@ int main()
 
     // input
     scanf("%d", &n);
-    kdtree* tree = new kdtree(n);
+    pair<double, double>* g = new pair<double, double>[n];
     for (int i = 0; i < n; i++)
-        scanf("%d", &tree->g[i]);
+        scanf("%lf %lf", &g[i].first, &g[i].second);
 
-    testQS(n, tree);
+    // creating tree
+    kdtree* tree = new kdtree(n);
+    tree->create(g);
+    //testQS(n, g, tree);
 
 //    for (int i = 0; i < n; i++)
-//        printf("%d, ", tree->g[i]);
+//        printf("%f, %f\n", g[i].first, g[i].second);
     return 0;
 }

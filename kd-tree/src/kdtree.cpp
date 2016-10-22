@@ -5,37 +5,52 @@
 */
 
 #include <stdio.h>
+#include <utility>
 #include <algorithm>
 
 #include "../include/kdtree.h"
+#include "../include/node.h"
 
 using namespace std;
 
 /*
     Constructor.
 */
-kdtree::kdtree (int n)
+kdtree::kdtree(int n)
 {
     this->n = n;
-    this->g = new int[n];
 }
 
 /*
-    Finds k-th element in the array 'g'.
+    Finds k-th element in the given interval of array 'g'.
 */
-int kdtree::quickselect(int l, int r, int k)
+pair<double, double> kdtree::quickselect(pair<double, double>* g, int l, int r, int k, bool cmpX)
 {
-    // pivot = a[r]
+    // pivot = g[r]
     int smallIndx = l - 1; // last smaller than pivot
 
     // smaller elements are in interval [l, smallIndx]
     // larger or equal elements are in interval [smallIndx+1, r]
-    for (int i = l; i < r; i++)
+    if (cmpX) // compare to the first coordinate (X)
     {
-        if (g[i] < g[r])
+        for (int i = l; i < r; i++)
         {
-            smallIndx++;
-            swap(g[i], g[smallIndx]);
+            if (g[i].first < g[r].first)
+            {
+                smallIndx++;
+                swap(g[i], g[smallIndx]);
+            }
+        }
+    }
+    else // compare to the second coordinate (Y)
+    {
+        for (int i = l; i < r; i++)
+        {
+            if (g[i].second < g[r].second)
+            {
+                smallIndx++;
+                swap(g[i], g[smallIndx]);
+            }
         }
     }
 
@@ -50,10 +65,18 @@ int kdtree::quickselect(int l, int r, int k)
     }
     else if (p > k)
     {
-        return quickselect(l, p - 1, k);
+        return quickselect(g, l, p - 1, k, cmpX);
     }
     else
     {
-        return quickselect(p + 1, r, k);
+        return quickselect(g, p + 1, r, k, cmpX);
     }
+}
+
+/*
+    Creates kd-tree with given array of nodes.
+*/
+void kdtree::create(pair<double, double>* g)
+{
+
 }

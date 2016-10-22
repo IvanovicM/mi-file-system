@@ -1,13 +1,24 @@
 # depslib dependency file v1.0
-1476911251 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\src\main.cpp
+1477174856 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\src\main.cpp
 	<stdio.h>
+	<utility>
 	"../include/kdtree.h"
 
-1476910720 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\src\kdtree.cpp
+1477174876 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\src\kdtree.cpp
 	<stdio.h>
+	<utility>
 	<algorithm>
 	"../include/kdtree.h"
+	"../include/node.h"
 
-1476909166 d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\include\kdtree.h
+1477174681 d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\include\kdtree.h
+	<stdio.h>
+	<utility>
+
+1477169543 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\src\node.cpp
+	<stdio.h>
+	"../include/node.h"
+
+1477175121 d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\include\node.h
 	<stdio.h>
 

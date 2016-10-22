@@ -4,21 +4,22 @@
     year: 2016
 */
 
-#ifndef __NODE
-#define __NODE
+#ifndef __KDTREE
+#define __KDTREE
 
 #include <stdio.h>
+#include <utility>
 
 class kdtree
 {
     public:
         int n; // Number of nodes.
-        int* g; // Array of nodes.
 
     public:
         kdtree(int n);
 
-        int quickselect(int l, int r, int k);
+        std::pair<double, double> quickselect(std::pair<double, double>* g, int l, int r, int k, bool cmpX);
+        void create(std::pair<double, double>* g);
 
 };
 
