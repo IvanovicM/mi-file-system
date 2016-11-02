@@ -76,7 +76,17 @@ pair<double, double> kdtree::quickselect(pair<double, double>* g, int l, int r, 
 /*
     Creates kd-tree with given array of nodes.
 */
-void kdtree::create(pair<double, double>* g)
+node* kdtree::create(pair<double, double>* g, int l, int r, bool cmpX)
 {
+    // subtree that does not exist
+    if (r>l) return NULL;
 
+    // making root of subtree and its sons
+    int k = (r-l+1)/2 + l;
+    pair<double, double> x = quickselect(g, l, r, k, cmpX);
+    node* nd = new node(x.first, x.second);
+    nd->fstSon = create(g, l, k-1, !cmpX);
+    nd->secSon = create(g, k+1, r, !cmpX);
+
+    return nd;
 }

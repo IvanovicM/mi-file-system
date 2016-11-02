@@ -8,6 +8,7 @@
 #include <utility>
 
 #include "../include/kdtree.h"
+#include "../include/node.h"
 
 using namespace std;
 
@@ -30,7 +31,8 @@ int main()
 
     // creating tree
     kdtree* tree = new kdtree(n);
-    tree->create(g);
+    node* root;
+    root = tree->create(g, 0, n-1, true);
     //testQS(n, g, tree);
 
 //    for (int i = 0; i < n; i++)

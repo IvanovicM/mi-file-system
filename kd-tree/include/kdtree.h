@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <utility>
 
+#include "../include/node.h"
+
 class kdtree
 {
     public:
@@ -19,7 +21,7 @@ class kdtree
         kdtree(int n);
 
         std::pair<double, double> quickselect(std::pair<double, double>* g, int l, int r, int k, bool cmpX);
-        void create(std::pair<double, double>* g);
+        node* create(std::pair<double, double>* g, int l, int r, bool cmpX);
 
 };
 

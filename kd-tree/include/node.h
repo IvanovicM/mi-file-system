@@ -18,6 +18,7 @@ class node
         node* secSon; // second son
 
     public:
+        node();
         node(double x, double y);
 };
 
