@@ -90,3 +90,11 @@ node* kdtree::create(pair<double, double>* g, int l, int r, bool cmpX)
 
     return nd;
 }
+
+/*
+    Nearest neighbour search for given coordinates.
+*/
+node* kdtree::NNsearch(double x, double y)
+{
+    return NULL;
+}

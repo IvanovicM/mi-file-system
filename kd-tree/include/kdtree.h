@@ -22,7 +22,7 @@ class kdtree
 
         std::pair<double, double> quickselect(std::pair<double, double>* g, int l, int r, int k, bool cmpX);
         node* create(std::pair<double, double>* g, int l, int r, bool cmpX);
-
+        node* NNsearch(double x, double y);
 };
 
 #endif
