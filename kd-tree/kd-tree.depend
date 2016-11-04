@@ -1,18 +1,19 @@
 # depslib dependency file v1.0
-1478124034 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\src\main.cpp
+1478289539 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\src\main.cpp
 	<stdio.h>
 	<utility>
+	"../include/test.h"
 	"../include/kdtree.h"
 	"../include/node.h"
 
-1478123973 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\src\kdtree.cpp
+1478289990 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\src\kdtree.cpp
 	<stdio.h>
 	<utility>
 	<algorithm>
 	"../include/kdtree.h"
 	"../include/node.h"
 
-1478126004 d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\include\kdtree.h
+1478289662 d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\include\kdtree.h
 	<stdio.h>
 	<utility>
 	"../include/node.h"
@@ -21,6 +22,20 @@
 	<stdio.h>
 	"../include/node.h"
 
-1478123837 d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\include\node.h
+1478288225 d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\include\node.h
 	<stdio.h>
+
+1478289677 d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\include\test.h
+	<stdio.h>
+	<utility>
+	"../include/kdtree.h"
+	"../include/node.h"
+
+1478289990 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\kd-tree\src\test.cpp
+	<stdio.h>
+	<utility>
+	<math.h>
+	"../include/test.h"
+	"../include/node.h"
+	"../include/kdtree.h"
 

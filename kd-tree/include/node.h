@@ -13,9 +13,10 @@
 class node
 {
     public:
-        double x, y; // x, y coordinates
-        node* fstSon; // first son
-        node* secSon; // second son
+        double x; // x coordinate
+        double y; // y coordinate
+        node* left; // first son
+        node* right; // second son
 
     public:
         node();

@@ -16,6 +16,7 @@ class kdtree
 {
     public:
         int n; // Number of nodes.
+        node* root; // Root of the tree
 
     public:
         kdtree(int n);
