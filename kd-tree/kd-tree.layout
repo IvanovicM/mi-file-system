@@ -2,33 +2,48 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="src\node.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\test.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="108" topLine="0" />
+			<Cursor1 position="370" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\kdtree.cpp" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\test.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2208" topLine="32" />
+			<Cursor1 position="861" topLine="0" />
 		</Cursor>
 		<Folding>
-			<Collapse line="19" />
+			<Collapse line="20" />
 			<Collapse line="27" />
 		</Folding>
 	</File>
 	<File name="include\kdtree.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="501" topLine="7" />
+			<Cursor1 position="288" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="include\node.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="317" topLine="0" />
+			<Cursor1 position="201" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\main.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="777" topLine="11" />
+			<Cursor1 position="188" topLine="0" />
 		</Cursor>
+	</File>
+	<File name="src\node.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="104" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\kdtree.cpp" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1254" topLine="14" />
+		</Cursor>
+		<Folding>
+			<Collapse line="19" />
+			<Collapse line="35" />
+			<Collapse line="46" />
+		</Folding>
 	</File>
 </CodeBlocks_layout_file>

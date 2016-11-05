@@ -33,9 +33,11 @@
 		</Compiler>
 		<Unit filename="include/kdtree.h" />
 		<Unit filename="include/node.h" />
+		<Unit filename="include/test.h" />
 		<Unit filename="src/kdtree.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/node.cpp" />
+		<Unit filename="src/test.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

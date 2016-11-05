@@ -55,7 +55,7 @@ pair<double, double> kdtree::quickselect(pair<double, double>* g, int l, int r, 
         }
     }
 
-    // pitting pivot on the its position in the array
+    // putting pivot on the its position in the array
     int p = smallIndx + 1;
     swap(g[p], g[r]);
 

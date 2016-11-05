@@ -30,9 +30,9 @@ int main()
     // testing
     test* tst = new test();
     //tst->testQuickselect(n, g, tree);
-    tst->testCreate(tree);
+    tst->testCreate(tree->root);
 
-    for (int i = 0; i < n; i++)
-        printf("%f, %f\n", g[i].first, g[i].second);
+//    for (int i = 0; i < n; i++)
+//        printf("%f, %f\n", g[i].first, g[i].second);
     return 0;
 }

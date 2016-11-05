@@ -24,6 +24,16 @@ void test::testQuickselect(int n, pair<double, double>* g, kdtree* tree)
     printf("%d-th element in the interval [%d, %d] of array is: (%f %f).\n", k, l, r, x.first, x.second);
 }
 
-void test::testCreate(kdtree* tree)
+void test::testCreate(node* nd)
 {
+    if (nd == NULL) return;
+
+    printf("\nnode: (%f, %f)\n", nd->x, nd->y);
+    if (nd->left != NULL)
+        printf("left: (%f, %f)\n", nd->left->x, nd->left->y);
+    if (nd->right != NULL)
+        printf("right: (%f, %f)\n", nd->right->x, nd->right->y);
+
+    testCreate(nd->left);
+    testCreate(nd->right);
 }
