@@ -89,6 +89,15 @@ node* kdtree::create(pair<double, double>* g, int l, int r, bool cmpX)
     nd->left = create(g, l, k-1, !cmpX);
     nd->right = create(g, k+1, r, !cmpX);
 
+    // parent
+    if (nd->left)
+        nd->left->parent = nd;
+    if (nd->right)
+        nd->right->parent = nd;
+
+    // dividing space
+    nd->cmpX = cmpX;
+
     return nd;
 }
 
@@ -97,5 +106,65 @@ node* kdtree::create(pair<double, double>* g, int l, int r, bool cmpX)
 */
 node* kdtree::NNsearch(double x, double y)
 {
-    return NULL;
+    // finding the leaf of the tree
+    node* curr = root;
+    bool found = false;
+    while (!found)
+    {
+        if (curr->cmpX) // X
+        {
+            if (x <= curr->x) //left
+            {
+                if (curr->left) // exist
+                {
+                    curr = curr->left;
+                }
+                else // does not exist
+                {
+                    found = true;
+                }
+            }
+            else // right
+            {
+                if (curr->right) // exist
+                {
+                    curr = curr->right;
+                }
+                else // does not exist
+                {
+                    found = true;
+                }
+            }
+        }
+        else // Y
+        {
+            if (y <= curr->y) //left
+            {
+                if (curr->left) // exist
+                {
+                    curr = curr->left;
+                }
+                else // does not exist
+                {
+                    found = true;
+                }
+            }
+            else // right
+            {
+                if (curr->right) // exist
+                {
+                    curr = curr->right;
+                }
+                else // does not exist
+                {
+                    found = true;
+                }
+            }
+        }
+    }
+
+    // finding the nearest neighbour
+    // ...
+
+    return curr;
 }

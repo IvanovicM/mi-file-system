@@ -28,11 +28,14 @@ void test::testCreate(node* nd)
 {
     if (nd == NULL) return;
 
-    printf("\nnode: (%f, %f)\n", nd->x, nd->y);
-    if (nd->left != NULL)
-        printf("left: (%f, %f)\n", nd->left->x, nd->left->y);
-    if (nd->right != NULL)
-        printf("right: (%f, %f)\n", nd->right->x, nd->right->y);
+    if (nd->parent != NULL)
+        printf("node: (%f, %f), parent: (%f, %f)\n",  nd->x, nd->y, nd->parent->x, nd->parent->y);
+
+//    printf("\nnode: (%f, %f)\n", nd->x, nd->y);
+//    if (nd->left != NULL)
+//        printf("left: (%f, %f)\n", nd->left->x, nd->left->y);
+//    if (nd->right != NULL)
+//        printf("right: (%f, %f)\n", nd->right->x, nd->right->y);
 
     testCreate(nd->left);
     testCreate(nd->right);

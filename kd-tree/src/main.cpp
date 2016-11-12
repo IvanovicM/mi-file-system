@@ -27,12 +27,10 @@ int main()
     kdtree* tree = new kdtree(n);
     tree->root = tree->create(g, 0, n-1, true);
 
-    // testing
-    test* tst = new test();
-    //tst->testQuickselect(n, g, tree);
-    tst->testCreate(tree->root);
+//    // testing
+//    test* tst = new test();
+//    tst->testQuickselect(n, g, tree);
+//    tst->testCreate(tree->root);
 
-//    for (int i = 0; i < n; i++)
-//        printf("%f, %f\n", g[i].first, g[i].second);
     return 0;
 }

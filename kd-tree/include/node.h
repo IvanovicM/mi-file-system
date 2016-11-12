@@ -17,6 +17,8 @@ class node
         double y; // y coordinate
         node* left; // first son
         node* right; // second son
+        node* parent; // its parent
+        bool cmpX; // which coordinate node divides space by
 
     public:
         node();
