@@ -2,47 +2,51 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="src\test.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\node.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="861" topLine="0" />
+			<Cursor1 position="365" topLine="1" />
+		</Cursor>
+	</File>
+	<File name="src\kdtree.cpp" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="275" topLine="12" />
 		</Cursor>
 		<Folding>
-			<Collapse line="20" />
+			<Collapse line="19" />
+			<Collapse line="28" />
+			<Collapse line="35" />
+			<Collapse line="80" />
+			<Collapse line="107" />
 		</Folding>
+	</File>
+	<File name="src\main.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="647" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="include\test.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="418" topLine="0" />
+		</Cursor>
 	</File>
 	<File name="src\node.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="104" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\main.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\test.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="692" topLine="9" />
-		</Cursor>
-	</File>
-	<File name="include\test.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="370" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\kdtree.cpp" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2074" topLine="25" />
+			<Cursor1 position="228" topLine="0" />
 		</Cursor>
 		<Folding>
-			<Collapse line="19" />
-			<Collapse line="28" />
-			<Collapse line="35" />
+			<Collapse line="17" />
+			<Collapse line="24" />
+			<Collapse line="41" />
 		</Folding>
-	</File>
-	<File name="include\node.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="201" topLine="0" />
-		</Cursor>
 	</File>
 	<File name="include\kdtree.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="547" topLine="2" />
+			<Cursor1 position="236" topLine="4" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

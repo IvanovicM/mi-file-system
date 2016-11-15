@@ -19,7 +19,7 @@ class test
     public:
         void testQuickselect(int n, std::pair<double, double>* g, kdtree* tree);
         void testCreate(node* nd);
-
+        void testNNsearch(kdtree* tree);
 };
 
 #endif

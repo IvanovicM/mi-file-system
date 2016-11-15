@@ -28,9 +28,10 @@ int main()
     tree->root = tree->create(g, 0, n-1, true);
 
 //    // testing
-//    test* tst = new test();
+    test* tst = new test();
 //    tst->testQuickselect(n, g, tree);
 //    tst->testCreate(tree->root);
+    tst->testNNsearch(tree);
 
     return 0;
 }

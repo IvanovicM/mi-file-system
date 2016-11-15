@@ -12,9 +12,6 @@
 #include "../include/node.h"
 #include "../include/kdtree.h"
 
-#define PARENT(i) ((i-1) / 2)
-#define LINE_WIDTH 70
-
 using namespace std;
 
 void test::testQuickselect(int n, pair<double, double>* g, kdtree* tree)
@@ -39,4 +36,18 @@ void test::testCreate(node* nd)
 
     testCreate(nd->left);
     testCreate(nd->right);
+}
+
+void test::testNNsearch(kdtree* tree)
+{
+    int q;
+    scanf("%d", &q);
+
+    while (q--)
+    {
+        double x, y;
+        scanf("%lf %lf", &x, &y);
+        node* best = tree->NNsearch(x, y);
+        printf("nearest: %f %f\n", best->x, best->y);
+    }
 }

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <utility>
 #include <algorithm>
+#include <math.h>
 
 #include "../include/kdtree.h"
 #include "../include/node.h"
@@ -102,22 +103,68 @@ node* kdtree::create(pair<double, double>* g, int l, int r, bool cmpX)
 }
 
 /*
-    Nearest neighbour search for given coordinates.
+    Distance between a point and a node.
+*/
+double kdtree::dist(node* a, double x, double y)
+{
+    return sqrt((a->x - x)*(a->x - x) + (a->y - y)*(a->y - y));
+}
+
+/*
+    Depth First Search
+    // min_dist = min distance between point X and the best neighbor
+*/
+void kdtree::DFS(node** best, node* curr, node* from, double Xx, double Xy)
+{
+    if (curr == NULL)
+        return;
+
+    // if curr is nearest than best
+    if (dist(curr, Xx, Xy) < dist(*best, Xx, Xy))
+        *best = curr;
+
+    // go to left
+    if (curr->left != from)
+        DFS(best, curr->left, curr, Xx, Xy);
+
+    // go to right
+    if (curr->right != from)
+        DFS(best, curr->right, curr, Xx, Xy);
+
+    // go to parent if it was not visited
+    if (curr->parent != NULL && curr->parent != from)
+    {
+        // go to parent if it is a root of a subtree that should be visited
+        if (curr->parent->cmpX) // parent compares by X coordinate
+        {
+            if (dist(*best, Xx, Xy) > abs(Xx - curr->parent->x))
+                DFS(best, curr->parent, curr, Xx, Xy);
+        }
+        else // parent compares by Y coordinate
+        {
+            if (dist(*best, Xx, Xy) > abs(Xy - curr->parent->y))
+                DFS(best, curr->parent, curr, Xx, Xy);
+        }
+    }
+}
+
+/*
+    Nearest neighbor search for given coordinates.
 */
 node* kdtree::NNsearch(double x, double y)
 {
     // finding the leaf of the tree
-    node* curr = root;
+    node* best = root;
     bool found = false;
     while (!found)
     {
-        if (curr->cmpX) // X
+        if (best->cmpX) // X
         {
-            if (x <= curr->x) //left
+            if (x <= best->x) //left
             {
-                if (curr->left) // exist
+                if (best->left) // exist
                 {
-                    curr = curr->left;
+                    best = best->left;
                 }
                 else // does not exist
                 {
@@ -126,9 +173,9 @@ node* kdtree::NNsearch(double x, double y)
             }
             else // right
             {
-                if (curr->right) // exist
+                if (best->right) // exist
                 {
-                    curr = curr->right;
+                    best = best->right;
                 }
                 else // does not exist
                 {
@@ -138,11 +185,11 @@ node* kdtree::NNsearch(double x, double y)
         }
         else // Y
         {
-            if (y <= curr->y) //left
+            if (y <= best->y) //left
             {
-                if (curr->left) // exist
+                if (best->left) // exist
                 {
-                    curr = curr->left;
+                    best = best->left;
                 }
                 else // does not exist
                 {
@@ -151,9 +198,9 @@ node* kdtree::NNsearch(double x, double y)
             }
             else // right
             {
-                if (curr->right) // exist
+                if (best->right) // exist
                 {
-                    curr = curr->right;
+                    best = best->right;
                 }
                 else // does not exist
                 {
@@ -164,7 +211,7 @@ node* kdtree::NNsearch(double x, double y)
     }
 
     // finding the nearest neighbour
-    // ...
+    DFS(&best, best, NULL, x, y);
 
-    return curr;
+    return best;
 }
