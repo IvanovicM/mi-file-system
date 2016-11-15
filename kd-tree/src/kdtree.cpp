@@ -123,29 +123,36 @@ void kdtree::DFS(node** best, node* curr, node* from, double Xx, double Xy)
     if (dist(curr, Xx, Xy) < dist(*best, Xx, Xy))
         *best = curr;
 
-    // go to left
-    if (curr->left != from)
-        DFS(best, curr->left, curr, Xx, Xy);
-
-    // go to right
-    if (curr->right != from)
-        DFS(best, curr->right, curr, Xx, Xy);
-
-    // go to parent if it was not visited
-    if (curr->parent != NULL && curr->parent != from)
+    // go to left and right
+    if (curr->parent == from)
     {
-        // go to parent if it is a root of a subtree that should be visited
-        if (curr->parent->cmpX) // parent compares by X coordinate
+        DFS(best, curr->left, curr, Xx, Xy);
+        DFS(best, curr->right, curr, Xx, Xy);
+    }
+    else
+    {
+        double curr_dist = dist(*best, Xx, Xy);
+        if (curr->cmpX) // parent compares by X coordinate
         {
-            if (dist(*best, Xx, Xy) > abs(Xx - curr->parent->x))
-                DFS(best, curr->parent, curr, Xx, Xy);
+            if (curr->left != from && Xx >= curr->x && curr_dist > abs(Xx - curr->x))
+                DFS(best, curr->left, curr, Xx, Xy);
+
+            if (curr->right != from && Xx <= curr->x && curr_dist > abs(Xx - curr->x))
+                DFS(best, curr->right, curr, Xx, Xy);
         }
         else // parent compares by Y coordinate
         {
-            if (dist(*best, Xx, Xy) > abs(Xy - curr->parent->y))
-                DFS(best, curr->parent, curr, Xx, Xy);
+            if (curr->left != from && Xy >= curr->y && curr_dist > abs(Xy - curr->y))
+                DFS(best, curr->left, curr, Xx, Xy);
+
+            if (curr->right != from && Xy <= curr->y && curr_dist > abs(Xy - curr->y))
+                DFS(best, curr->right, curr, Xx, Xy);
         }
     }
+
+    // go to parent if it was not visited
+    if (curr->parent != from)
+        DFS(best, curr->parent, curr, Xx, Xy);
 }
 
 /*
