@@ -88,7 +88,7 @@ void commands::print_file(memory* part, node* curr)
     int sz = curr->sizeB;
 
     //node; optional
-    // curr->print_node();
+    curr->print_node();
 
     // file
     while (from_fr != 0 && sz)

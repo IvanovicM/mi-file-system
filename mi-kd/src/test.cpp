@@ -11,10 +11,12 @@
 #include "../include/test.h"
 #include "../include/node.h"
 #include "../include/kdtree.h"
+#include "../include/memory.h"
+#include "../include/commands.h"
 
 using namespace std;
 
-void test::testNNsearch(kdtree* tree)
+void test::testNNsearch(memory* part, commands* cmd, kdtree* tree)
 {
     int q;
     scanf("%d", &q);
@@ -24,6 +26,7 @@ void test::testNNsearch(kdtree* tree)
         double x, y;
         scanf("%lf %lf", &x, &y);
         node* best = tree->NNsearch(x, y);
-        printf("nearest: %s\n", best->name);
+        cmd->print_file(part, best);
+        //printf("nearest: %s\n", best->name);
     }
 }

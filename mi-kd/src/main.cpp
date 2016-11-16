@@ -65,10 +65,7 @@ int main()
 
     // testing
     test* tst = new test();
-    tst->testNNsearch(tree);
-
-//    commands* comm = new commands();
-//    comm->read_commands(part, root, root);
+    tst->testNNsearch(part, cmd, tree);
 
     return 0;
 }

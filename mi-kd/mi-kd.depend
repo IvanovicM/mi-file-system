@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1479250491 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\mi-kd\src\commands.cpp
+1479255515 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\mi-kd\src\commands.cpp
 	<stdio.h>
 	<iostream>
 	<sstream>
@@ -51,7 +51,7 @@
 	"../include/memory.h"
 	"../include/commands.h"
 
-1479254476 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\mi-kd\src\main.cpp
+1479255497 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\mi-kd\src\main.cpp
 	<stdio.h>
 	<cstdlib>
 	<map>
@@ -68,11 +68,13 @@
 	"../include/kdtree.h"
 	"../include/test.h"
 
-1479236321 d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\mi-kd\include\test.h
+1479255351 d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\mi-kd\include\test.h
 	<stdio.h>
 	<utility>
 	"../include/kdtree.h"
 	"../include/node.h"
+	"../include/memory.h"
+	"../include/commands.h"
 
 1479248904 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\mi-kd\src\memory.cpp
 	<stdio.h>
@@ -93,11 +95,13 @@
 	"../include/node.h"
 	"../include/memory.h"
 
-1479249018 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\mi-kd\src\test.cpp
+1479255351 source:d:\marina\petnica\petnica 2016\projekat 2016\git\mi-file-system\mi-kd\src\test.cpp
 	<stdio.h>
 	<utility>
 	<math.h>
 	"../include/test.h"
 	"../include/node.h"
 	"../include/kdtree.h"
+	"../include/memory.h"
+	"../include/commands.h"
 
