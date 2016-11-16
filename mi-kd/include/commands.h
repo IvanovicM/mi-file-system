@@ -26,24 +26,11 @@ class commands
         std::map<std::string, int> mm; // codes of commands
 
     public:
-        void input_error();
-
-        void _list_directory(node* curr);
-        node* _change_directory(node* curr);
-        void _make_directory(memory* part, node* curr, std::string sub);
-        void _make_file(memory* part, node* curr, std::string sub);
-        void _delete(memory* part, node* root, node* curr, node* del);
+        node* _make_directory(memory* part, std::pair<std::pair<std::string, std::string>, std::pair<double, double>> x);
         void _cp_extern_file(memory* part, node* curr, char* extern_file_name);
-        void _cp_intern_file(memory* part, node* from, node* to);
-
-        void __help(std::string cmd);
-
-        void print_path(node* curr, node* root);
         void print_file(memory* part, node* curr);
-        node* find_son(node* parent, char* son_name);
-        void destination(memory* part, node* root, node* start_from, std::string dest);
+
         void map_commands();
-        void read_commands(memory* part, node* curr, node* root);
 };
 
 #endif

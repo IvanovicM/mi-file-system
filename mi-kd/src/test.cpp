@@ -24,6 +24,6 @@ void test::testNNsearch(kdtree* tree)
         double x, y;
         scanf("%lf %lf", &x, &y);
         node* best = tree->NNsearch(x, y);
-        printf("nearest: %f %f\n", best->x, best->y);
+        printf("nearest: %s\n", best->name);
     }
 }

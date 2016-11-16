@@ -26,7 +26,7 @@ kdtree::kdtree(int n)
 /*
     Finds k-th element in the given interval of array 'g'.
 */
-pair<double, double> kdtree::quickselect(pair<double, double>* g, int l, int r, int k, bool cmpX)
+pair<pair<string, string>, pair<double, double>> kdtree::quickselect(pair<pair<string, string>, pair<double, double>>* g, int l, int r, int k, bool cmpX)
 {
     // pivot = g[r]
     int smallIndx = l - 1; // last smaller than pivot
@@ -37,7 +37,7 @@ pair<double, double> kdtree::quickselect(pair<double, double>* g, int l, int r, 
     {
         for (int i = l; i < r; i++)
         {
-            if (g[i].first < g[r].first)
+            if (g[i].second.first < g[r].second.first)
             {
                 smallIndx++;
                 swap(g[i], g[smallIndx]);
@@ -48,7 +48,7 @@ pair<double, double> kdtree::quickselect(pair<double, double>* g, int l, int r, 
     {
         for (int i = l; i < r; i++)
         {
-            if (g[i].second < g[r].second)
+            if (g[i].second.second < g[r].second.second)
             {
                 smallIndx++;
                 swap(g[i], g[smallIndx]);
@@ -78,17 +78,17 @@ pair<double, double> kdtree::quickselect(pair<double, double>* g, int l, int r, 
 /*
     Creates kd-tree with given array of nodes.
 */
-node* kdtree::create(pair<double, double>* g, int l, int r, bool cmpX)
+node* kdtree::create(memory* part, commands* cmd, pair<pair<string, string>, pair<double, double>>* g, int l, int r, bool cmpX)
 {
     // subtree that does not exist
     if (r<l) return NULL;
 
     // making root of subtree and its sons
     int k = (r-l+1)/2 + l;
-    pair<double, double> x = quickselect(g, l, r, k, cmpX);
-    node* nd = new node(x.first, x.second);
-    nd->left = create(g, l, k-1, !cmpX);
-    nd->right = create(g, k+1, r, !cmpX);
+    pair<pair<string, string>, pair<double, double>> x = quickselect(g, l, r, k, cmpX);
+    node* nd = cmd->_make_directory(part, x);
+    nd->left = create(part, cmd, g, l, k-1, !cmpX);
+    nd->right = create(part, cmd, g, k+1, r, !cmpX);
 
     // parent
     if (nd->left)

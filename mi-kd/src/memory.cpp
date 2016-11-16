@@ -104,7 +104,7 @@ int memory::fff_fragment()
 
     Output: pointer to node that is created
 */
-node* memory::create_node(char* name, bool folder, node* parent, node* older_from, node* older_to)
+node* memory::create_node(char* name)
 {
     // finding first free field of free memory
     pair<int, int> x = fff_field();
@@ -112,54 +112,17 @@ node* memory::create_node(char* name, bool folder, node* parent, node* older_fro
 
     // given parameters
     strcpy(beg->name, name);
-    beg->folder = folder;
-    beg->parent = parent;
-    beg->older_from = older_from;
-    beg->older_to = older_to;
-
-    if (beg->older_to != NULL)
-        (beg->older_to)->older_from = beg;
+    beg->parent = NULL;
 
     beg->indx = node_num;
     node_num++;
 
     // when created
-    beg->younger = NULL;
     beg->start = 0;
     beg->fragm = x.first;
     beg->sizeB = 0;
     beg->date_modf = time(0);
-
-    return beg;
-}
-
-/*
-    Function for creating folder that is root and cannot be deleted.
-*/
-node* memory::create_root()
-{
-    free_fr.pop_back();
-    *((short*)(mem[0])) = *((short*)(mem[0])) + 1; // in this field is one node added
-    *((char*)(mem[0] + 2)) = 1; // filled field with some node
-
-    pair<int, int> x = make_pair(0, 0);
-    node* beg = (node*)(mem[x.first] + 3 + x.second * (sizeof(node) + 1));
-
-    // default parameters for root
-    strcpy(beg->name, "R");
-    beg->folder = true;
-    beg->parent = beg;
-    beg->older_to = NULL;
-
-    beg->indx = node_num;
-    node_num++;
-
-    // when created
-    beg->younger = NULL;
-    beg->start = 0;
-    beg->fragm = x.first;
-    beg->sizeB = 0;
-    beg->date_modf = time(0);
+    beg->start = fff_fragment();
 
     return beg;
 }
@@ -197,106 +160,4 @@ pair<int, int> memory::add_extern_file(node* curr, char* buffer, int vl, int crf
     curr->sizeB += vl;
 
     return make_pair(crfr, frnum);
-}
-
-/*
-    Adding data to file from this file system.
-*/
-void memory::add_intern_file(node* from, node* curr)
-{
-    if (from == NULL)
-    {
-        delete_node(curr);
-    }
-
-    int from_fr = from->start;
-    int frsz = fr_mem * 1024 - 2 - 4; // fr_mem - sizeof(short) - sizeof(int);
-
-    // start
-    int curr_fr;
-    if (from_fr != 0)
-    {
-        curr->start = curr_fr = fff_fragment();
-
-        for (int i = 0; i < frsz; i++)
-        {
-            *((char*)(mem[curr_fr] + 2 + i)) = *((char*)(mem[from_fr] + 2 + i));
-        }
-
-        from_fr = *((int*)( (char*)(mem[from_fr] + fr_mem * 1024 - 4)) );
-    }
-
-    // continue
-    while (from_fr != 0)
-    {
-        curr_fr = *((int*)( (char*)(mem[curr_fr] + fr_mem * 1024 - 4)) ) = fff_fragment();
-
-        for (int i = 0; i < frsz; i++)
-        {
-            *((char*)(mem[curr_fr] + 2 + i)) = *((char*)(mem[from_fr] + 2 + i));
-        }
-
-        from_fr = *((int*)( (char*)(mem[from_fr] + fr_mem * 1024 - 4)) );
-    }
-
-    curr->sizeB = from->sizeB;
-}
-
-/*
-    Function for deleting file
-
-    Input; pointer to node which is file that should be deleted
-
-    Output: /
-*/
-void memory::delete_file(node* del)
-{
-    while (del->start != 0)
-    {
-        free_fr.push_back(del->start);
-
-        // empty fragment
-        *((short*)(mem[del->start])) = 0;
-
-        // pointer to continue of file is NULL
-        int sl = *((int*)( (char*)(mem[del->start] + fr_mem * 1024 - 4)) );
-        *((int*)( (char*)(mem[del->start] + fr_mem * 1024 - 4)) ) = 0;
-        del->start = sl;
-    }
-
-    del->sizeB = 0;
-}
-
-/*
-    Function for deleting node
-
-    Input: pointer to node that should be deleted
-
-    Output: /
-*/
-void memory::delete_node(node* del)
-{
-    // deleting file if node is a file, but not a folder
-    delete_file(del);
-
-    // changing pointers
-    if (del->parent == del->older_from) // parent
-    {
-        (del->older_from)->younger = del->older_to;
-    }
-    else
-    {
-        (del->older_from)->older_to = del->older_to;
-    }
-    if (del->older_to != NULL)
-    {
-        (del->older_to)->older_from = del->older_from;
-    }
-
-    // declaring node as non-existent
-    *((short*)(mem[ del->fragm ])) = *((short*)(mem[ del->fragm ])) - 1; // in this fragment is one node less
-    if (*((short*)(mem[ del->fragm ])) == 0)
-        free_fr.push_back(del->fragm);
-
-    *((char*)(  (char*)del - 1)) = 0; // is not filled with node anymore
 }

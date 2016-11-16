@@ -38,12 +38,8 @@ class memory
         void initialize_mem();
         std::pair<int, int> fff_field();
         int fff_fragment();
-        node* create_node(char* name, bool folder, node* parent, node* older_from, node* older_to);
-        node* create_root();
+        node* create_node(char* name);
         std::pair<int, int> add_extern_file(node* curr, char* buffer, int vl, int crfr, int frnum);
-        void add_intern_file(node* from, node* curr);
-        void delete_node(node* del);
-        void delete_file(node* del);
 };
 
 #endif

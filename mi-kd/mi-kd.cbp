@@ -34,15 +34,12 @@
 		<Unit filename="include/commands.h" />
 		<Unit filename="include/kdtree.h" />
 		<Unit filename="include/memory.h" />
-		<Unit filename="include/node (2).h" />
 		<Unit filename="include/node.h" />
 		<Unit filename="include/test.h" />
 		<Unit filename="src/commands.cpp" />
 		<Unit filename="src/kdtree.cpp" />
-		<Unit filename="src/main (2).cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/memory.cpp" />
-		<Unit filename="src/node (2).cpp" />
 		<Unit filename="src/node.cpp" />
 		<Unit filename="src/test.cpp" />
 		<Extensions>

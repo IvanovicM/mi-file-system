@@ -23,7 +23,6 @@ class node
         char name[40]; // name of file; max length is 40
         int indx; // its unique ID
         int fragm; // what fragment this node is in
-        bool folder; // indicator for folders and files
         int sizeB; // how big this file or folder is
         time_t date_modf; // last date modified
         int start; // int of the fragment that file starts from; 0 for end, in that fragment cannot be file because in that fragment is root
@@ -34,8 +33,6 @@ class node
         node* right; // second son
         node* parent; // its parent
         bool cmpX; // which coordinate node divides space by
-
-        node* itsfile; // its file
 
     public:
         node();
