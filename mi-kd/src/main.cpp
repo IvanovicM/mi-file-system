@@ -23,6 +23,8 @@
 
 using namespace std;
 
+typedef pair<pair<string, string>, pair<double, double>> data;
+
 int main()
 {
     // memory initialization
@@ -32,32 +34,20 @@ int main()
 
     // input
     int n;
-    scanf("%d", &n);
-    pair<pair<string, string>, pair<double, double>>* g = new pair<pair<string, string>, pair<double, double>>[n];
-//    FILE* sfile;
-//    sfile = fopen("files.txt", "r");
-//    for (int i = 0; i < n; i++)
-//    {
-//        fscanf(sfile, "%lf %lf", &g[i].second.first, &g[i].second.second);
-//        char s[40];
-//        fscanf(sfile, "%s", s); cout<<g[i].second.first<<endl;
-//        g[i].first.first = s;
-//        fscanf(sfile, "%s", s);
-//        g[i].first.second = s;
-//
-//        cout<<g[i].first.first<<" "<<g[i].first.second<<endl;
-//    }
-//    fclose(sfile);
+    char buff[40];
+    FILE* sfile;
+    sfile = fopen("files.txt", "r");
+    fscanf(sfile, "%d", &n);
+    data* g = new data[n];
     for (int i = 0; i < n; i++)
     {
-        scanf("%lf %lf", &g[i].second.first, &g[i].second.second);
-
-        char s[40];
-        scanf("%s", &s);
-        g[i].first.first = s;
-        scanf("%s", &s);
-        g[i].first.second = s;
+        fscanf(sfile, "%lf %lf", &g[i].second.first, &g[i].second.second);
+        fscanf(sfile, "%s", buff);
+        g[i].first.first = buff;
+        fscanf(sfile, "%s", buff);
+        g[i].first.second = buff;
     }
+    fclose(sfile);
 
     // creating tree
     kdtree* tree = new kdtree(n);

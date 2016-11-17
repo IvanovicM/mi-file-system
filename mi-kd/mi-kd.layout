@@ -2,56 +2,9 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="src\test.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="300" topLine="9" />
-		</Cursor>
-	</File>
-	<File name="src\node.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="645" topLine="18" />
-		</Cursor>
-	</File>
-	<File name="src\kdtree.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2268" topLine="74" />
-		</Cursor>
-		<Folding>
-			<Collapse line="20" />
-			<Collapse line="81" />
-			<Collapse line="108" />
-			<Collapse line="117" />
-			<Collapse line="161" />
-		</Folding>
-	</File>
-	<File name="src\commands.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1916" topLine="84" />
-		</Cursor>
-	</File>
-	<File name="src\memory.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2962" topLine="61" />
-		</Cursor>
-		<Folding>
-			<Collapse line="26" />
-			<Collapse line="37" />
-			<Collapse line="60" />
-		</Folding>
-	</File>
 	<File name="include\test.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="287" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\main.cpp" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1715" topLine="26" />
-		</Cursor>
-	</File>
-	<File name="include\node.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="958" topLine="12" />
 		</Cursor>
 	</File>
 	<File name="include\memory.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -59,14 +12,57 @@
 			<Cursor1 position="934" topLine="21" />
 		</Cursor>
 	</File>
+	<File name="src\test.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="300" topLine="9" />
+		</Cursor>
+	</File>
+	<File name="src\main.cpp" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1499" topLine="30" />
+		</Cursor>
+	</File>
+	<File name="src\commands.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1159" topLine="31" />
+		</Cursor>
+	</File>
+	<File name="src\memory.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2962" topLine="85" />
+		</Cursor>
+		<Folding>
+			<Collapse line="26" />
+			<Collapse line="37" />
+			<Collapse line="60" />
+		</Folding>
+	</File>
+	<File name="src\node.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="645" topLine="18" />
+		</Cursor>
+	</File>
+	<File name="include\commands.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="388" topLine="8" />
+		</Cursor>
+	</File>
+	<File name="src\kdtree.cpp" open="1" top="1" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2268" topLine="146" />
+		</Cursor>
+		<Folding>
+			<Collapse line="20" />
+		</Folding>
+	</File>
 	<File name="include\kdtree.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="493" topLine="10" />
 		</Cursor>
 	</File>
-	<File name="include\commands.h" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\node.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="288" topLine="13" />
+			<Cursor1 position="958" topLine="12" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

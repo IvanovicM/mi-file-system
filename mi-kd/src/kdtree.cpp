@@ -14,6 +14,8 @@
 
 using namespace std;
 
+typedef pair<pair<string, string>, pair<double, double>> data;
+
 /*
     Constructor.
 */
@@ -26,7 +28,7 @@ kdtree::kdtree(int n)
 /*
     Finds k-th element in the given interval of array 'g'.
 */
-pair<pair<string, string>, pair<double, double>> kdtree::quickselect(pair<pair<string, string>, pair<double, double>>* g, int l, int r, int k, bool cmpX)
+data kdtree::quickselect(data* g, int l, int r, int k, bool cmpX)
 {
     // pivot = g[r]
     int smallIndx = l - 1; // last smaller than pivot
@@ -78,14 +80,14 @@ pair<pair<string, string>, pair<double, double>> kdtree::quickselect(pair<pair<s
 /*
     Creates kd-tree with given array of nodes.
 */
-node* kdtree::create(memory* part, commands* cmd, pair<pair<string, string>, pair<double, double>>* g, int l, int r, bool cmpX)
+node* kdtree::create(memory* part, commands* cmd, data* g, int l, int r, bool cmpX)
 {
     // subtree that does not exist
     if (r<l) return NULL;
 
     // making root of subtree and its sons
     int k = (r-l+1)/2 + l;
-    pair<pair<string, string>, pair<double, double>> x = quickselect(g, l, r, k, cmpX);
+    data x = quickselect(g, l, r, k, cmpX);
     node* nd = cmd->_make_directory(part, x);
     nd->left = create(part, cmd, g, l, k-1, !cmpX);
     nd->right = create(part, cmd, g, k+1, r, !cmpX);

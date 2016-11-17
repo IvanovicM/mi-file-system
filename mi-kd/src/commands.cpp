@@ -23,6 +23,8 @@
 
 using namespace std;
 
+typedef pair<pair<string, string>, pair<double, double>> data;
+
 /*
     cp -ext
 
@@ -59,7 +61,7 @@ void commands::_cp_extern_file(memory* part, node* curr, char* extern_file_name)
 /*
     mkdir
 */
-node* commands::_make_directory(memory* part, pair<pair<string, string>, pair<double, double>> x)
+node* commands::_make_directory(memory* part, data x)
 {
     node* nxt;
 
@@ -103,29 +105,4 @@ void commands::print_file(memory* part, node* curr)
     }
 
     printf("\n");
-}
-
-/*
-    List of commands with codes:
-        exit - 1
-        ld - 2
-        cd - 3
-        mkdir - 4
-        mkfile - 5
-        del - 6
-        cp - 7
-        pt - 8
-        help - 9
-*/
-void commands::map_commands()
-{
-    mm["exit"] = 1;
-    mm["ld"] = 2;
-    mm["cd"] = 3;
-    mm["mkdir"] = 4;
-    mm["mkfile"] = 5;
-    mm["del"] = 6;
-    mm["cp"] = 7;
-    mm["pt"] = 8;
-    mm["help"] = 9;
 }
