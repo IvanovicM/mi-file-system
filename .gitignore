@@ -28,6 +28,6 @@
 *.out
 *.app
 
-*.cpb
+*.cbp
 *.depend
 *.layout
